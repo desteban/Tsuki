@@ -1,4 +1,5 @@
 {
+  "author": {"name": "DogHouse", "url": "https://github.com/desteban/Tsuki"},
   "name": "tsuki",
   "private": true,
   "version": "0.0.0",
