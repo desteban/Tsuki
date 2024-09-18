@@ -9,50 +9,50 @@ importers:
   .:
     dependencies:
       react:
-        specifier: ^18.2.0
+        specifier: ^18.3.1
         version: 18.3.1
       react-dom:
-        specifier: ^18.2.0
+        specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/react':
-        specifier: ^18.2.64
+        specifier: ^18.3.7
         version: 18.3.7
       '@types/react-dom':
-        specifier: ^18.2.21
+        specifier: ^18.3.0
         version: 18.3.0
       '@typescript-eslint/eslint-plugin':
-        specifier: ^7.1.1
+        specifier: ^7.18.0
         version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.6.2))(eslint@8.57.1)(typescript@5.6.2)
       '@typescript-eslint/parser':
-        specifier: ^7.1.1
+        specifier: ^7.18.0
         version: 7.18.0(eslint@8.57.1)(typescript@5.6.2)
       '@vitejs/plugin-react':
-        specifier: ^4.2.1
+        specifier: ^4.3.1
         version: 4.3.1(vite@5.4.6(@types/node@22.5.5))
       electron:
-        specifier: ^30.0.1
+        specifier: ^30.5.1
         version: 30.5.1
       electron-builder:
         specifier: ^24.13.3
         version: 24.13.3(electron-builder-squirrel-windows@24.13.3(dmg-builder@24.13.3))
       eslint:
-        specifier: ^8.57.0
+        specifier: ^8.57.1
         version: 8.57.1
       eslint-plugin-react-hooks:
-        specifier: ^4.6.0
+        specifier: ^4.6.2
         version: 4.6.2(eslint@8.57.1)
       eslint-plugin-react-refresh:
-        specifier: ^0.4.5
+        specifier: ^0.4.12
         version: 0.4.12(eslint@8.57.1)
       typescript:
-        specifier: ^5.2.2
+        specifier: ^5.6.2
         version: 5.6.2
       vite:
-        specifier: ^5.1.6
+        specifier: ^5.4.6
         version: 5.4.6(@types/node@22.5.5)
       vite-plugin-electron:
-        specifier: ^0.28.6
+        specifier: ^0.28.7
         version: 0.28.7(vite-plugin-electron-renderer@0.14.5)
       vite-plugin-electron-renderer:
         specifier: ^0.14.5
@@ -959,8 +959,8 @@ packages:
   electron-publish@24.13.1:
     resolution: {integrity: sha512-2ZgdEqJ8e9D17Hwp5LEq5mLQPjqU3lv/IALvgp+4W8VeNhryfGhYEQC/PgDPMrnWUp+l60Ou5SJLsu+k4mhQ8A==}
 
-  electron-to-chromium@1.5.24:
-    resolution: {integrity: sha512-0x0wLCmpdKFCi9ulhvYZebgcPmHTkFVUfU2wzDykadkslKwT4oAmDTHEKLnlrDsMGZe4B+ksn8quZfZjYsBetA==}
+  electron-to-chromium@1.5.25:
+    resolution: {integrity: sha512-kMb204zvK3PsSlgvvwzI3wBIcAw15tRkYk+NQdsjdDtcQWTp2RABbMQ9rUBy8KNEOM+/E6ep+XC3AykiWZld4g==}
 
   electron@30.5.1:
     resolution: {integrity: sha512-AhL7+mZ8Lg14iaNfoYTkXQ2qee8mmsQyllKdqxlpv/zrKgfxz6jNVtcRRbQtLxtF8yzcImWdfTQROpYiPumdbw==}
@@ -2725,7 +2725,7 @@ snapshots:
   browserslist@4.23.3:
     dependencies:
       caniuse-lite: 1.0.30001660
-      electron-to-chromium: 1.5.24
+      electron-to-chromium: 1.5.25
       node-releases: 2.0.18
       update-browserslist-db: 1.1.0(browserslist@4.23.3)
 
@@ -2997,7 +2997,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  electron-to-chromium@1.5.24: {}
+  electron-to-chromium@1.5.25: {}
 
   electron@30.5.1:
     dependencies:
