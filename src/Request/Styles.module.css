@@ -1,17 +1,19 @@
 .form {
-  display: flex;
-  width: 100%;
+	display: flex;
+	width: 100%;
+	gap: 3px;
 }
 
 .flex {
-  display: flex;
-  width: 100%;
+	display: flex;
+	width: 100%;
+	gap: 5px;
 }
 
 .btn-send {
-  margin-left: 0.75rem;
+	margin-left: 0.75rem;
 }
 
 .full {
-  width: 100%;
+	width: 100%;
 }

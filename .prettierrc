@@ -4,7 +4,7 @@
 	"bracketSpacing": true,
 	"semi": true,
 	"experimentalTernaries": false,
-	"singleQuote": true,
+	"singleQuote": false,
 	"jsxSingleQuote": false,
 	"quoteProps": "as-needed",
 	"trailingComma": "all",
@@ -16,6 +16,7 @@
 	"printWidth": 100,
 	"requirePragma": false,
 	"tabWidth": 2,
-	"useTabs": false,
-	"embeddedLanguageFormatting": "auto"
+	"useTabs": true,
+	"embeddedLanguageFormatting": "auto",
+	"plugins": ["prettier-plugin-tailwindcss"]
 }
