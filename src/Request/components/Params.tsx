@@ -1,9 +1,12 @@
+import { TrashIcon } from '@/assets/Icons/TrashIcon';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ChangeEvent, useRef } from 'react';
 
 export type ItemParams = {
 	key: string;
 	value: string;
+	active: boolean;
 };
 
 export interface Props {
@@ -11,16 +14,24 @@ export interface Props {
 	setParams: (params: ItemParams[]) => void;
 }
 
-const stylesTd = 'group p-1 hover:bg-slate-50 group-hover:bg-gray-100';
-const stylesInput = 'bg-transparent focus:bg-slate-200';
-
 interface PropsRow {
 	keyParam: string;
-	changeKey: (value: string) => void;
 	valueParam: string;
+	isActive: boolean;
+	changeKey: (value: string) => void;
 	changeParam: (value: string) => void;
+	deleteParam: () => void;
+	changeActive: () => void;
 }
-const Row = ({ keyParam, changeKey: changeKey, changeParam, valueParam }: PropsRow) => {
+const Row = ({
+	keyParam,
+	changeKey,
+	changeParam,
+	valueParam,
+	deleteParam,
+	changeActive,
+	isActive,
+}: PropsRow) => {
 	const inputRef = useRef<HTMLInputElement>(null);
 	const valueRef = useRef<HTMLInputElement>(null);
 
@@ -35,10 +46,21 @@ const Row = ({ keyParam, changeKey: changeKey, changeParam, valueParam }: PropsR
 	};
 
 	return (
-		<tr>
-			<td className={stylesTd}>
+		<tr className="group p-1 focus-within:bg-accent hover:bg-accent">
+			<td>
+				<div className="flex items-center justify-center">
+					<input
+						type="checkbox"
+						aria-label="active param"
+						onChange={changeActive}
+						value={isActive ? 'on' : 'off'}
+					/>
+				</div>
+			</td>
+
+			<td className={''}>
 				<Input
-					className={`${stylesInput} !group-focus:bg-red-600 group`}
+					className={`group group-focus:bg-accent`}
 					placeholder="key"
 					value={keyParam}
 					ref={inputRef}
@@ -48,76 +70,93 @@ const Row = ({ keyParam, changeKey: changeKey, changeParam, valueParam }: PropsR
 
 			<td>
 				<Input
-					className={`${stylesInput} !group-focus:bg-red-600 group`}
+					className={`group group-focus:bg-accent`}
 					placeholder="value"
 					value={valueParam}
 					ref={valueRef}
 					onChange={handleValue}
 				/>
 			</td>
+
+			<td>
+				<div className="flex items-center justify-center">
+					<button
+						onClick={deleteParam}
+						aria-label="delete param"
+					>
+						<TrashIcon />
+					</button>
+				</div>
+			</td>
 		</tr>
 	);
 };
 
 export default function Params({ params, setParams }: Props) {
-	const handleParam = (index: number, key: 'key' | 'value', value: string) => {
+	const handleParam = (index: number, key: 'key' | 'value' | 'active', value: string | boolean) => {
 		const newParams = [...params];
 		newParams[index] = { ...newParams[index], [key]: value };
 		setParams(newParams);
 	};
 
-	const TableBody = () => (
-		<>
-			{params.map(({ key, value }, index) => (
-				<Row
-					key={index}
-					keyParam={key}
-					valueParam={value}
-					changeKey={(valueInput) => {
-						handleParam(index, 'key', valueInput);
-					}}
-					changeParam={(valueInput) => {
-						handleParam(index, 'value', valueInput);
-					}}
-				/>
-			))}
-		</>
-	);
+	const deleteParam = (indexDelete: number) => {
+		const newParams = params.filter((_, index) => index !== indexDelete);
+		setParams(newParams);
+	};
+
+	const handleActive = (index: number) => {
+		const newParams = [...params];
+		newParams[index].active = !newParams[index].active;
+		setParams(newParams);
+	};
 
 	return (
 		<div>
 			<h2>Query Parameters</h2>
 			<p>Add or edit your params for the request</p>
 
-			<button
-				className="rounded-md border px-2 py-1"
-				onClick={() => {
-					setParams([...params, { key: 'new key', value: 'the value of key' }]);
-				}}
-			>
-				Agregar
-			</button>
-
-			<pre>
-				<code>{JSON.stringify(params, null, 2)}</code>
-			</pre>
-
 			<section aria-label="params request">
 				<table
-					className="table w-full table-auto"
+					className="w-full border-separate border-spacing-1"
 					aria-label="params request"
 				>
 					<thead>
 						<tr className="font-semibold">
+							<td>Active</td>
 							<td>Key</td>
 							<td>Value</td>
 						</tr>
 					</thead>
 
 					<tbody>
-						<TableBody />
+						{params.map(({ key, value, active }, index) => (
+							<Row
+								key={index}
+								keyParam={key}
+								valueParam={value}
+								isActive={active}
+								deleteParam={() => deleteParam(index)}
+								changeKey={(valueInput) => {
+									handleParam(index, 'key', valueInput);
+								}}
+								changeParam={(valueInput) => {
+									handleParam(index, 'value', valueInput);
+								}}
+								changeActive={() => handleActive(index)}
+							/>
+						))}
 					</tbody>
 				</table>
+
+				<Button
+					className="w-full"
+					variant={'outline'}
+					onClick={() => {
+						setParams([...params, { key: '', value: '', active: false }]);
+					}}
+				>
+					Add Param
+				</Button>
 			</section>
 		</div>
 	);
