@@ -1,18 +1,19 @@
-import { Button } from "@/components/ui/button";
-import styles from "./Styles.module.css";
-import { ChangeEvent, FormEvent, useState } from "react";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
-import { SelectValue } from "@radix-ui/react-select";
-import { Input } from "@/components/ui/input";
-import ConfigurationReques from "./components/ConfigurationReques";
-import Params from "./components/Params";
-import Headers from "./components/Headers";
+import { Button } from '@/components/ui/button';
+import styles from './Styles.module.css';
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
+import { SelectValue } from '@radix-ui/react-select';
+import { Input } from '@/components/ui/input';
+import ConfigurationReques from './components/ConfigurationReques';
+import Params, { ItemParams } from './components/Params';
+import Headers from './components/Headers';
 
-type TypeHttp = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+type TypeHttp = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 export default function Request() {
-	const [method, setMethod] = useState<TypeHttp>("GET");
-	const [url, setUrl] = useState<string>("");
+	const [method, setMethod] = useState<TypeHttp>('GET');
+	const [params, setParams] = useState<ItemParams[]>([{ key: 'key1', value: 'Value key1' }]);
+	const [url, setUrl] = useState<string>('');
 
 	const ChangeMethod = (methodSelected: string) => {
 		setMethod(methodSelected as TypeHttp);
@@ -58,7 +59,7 @@ export default function Request() {
 					onChange={ChangeUrl}
 				/>
 
-				<Button className={styles["btn-send"]}>Send</Button>
+				<Button className={styles['btn-send']}>Send</Button>
 			</form>
 
 			<section className="my-4">
@@ -74,7 +75,12 @@ export default function Request() {
 
 			<section className="my-4">
 				<ConfigurationReques
-					onParams={<Params />}
+					onParams={
+						<Params
+							params={params}
+							setParams={setParams}
+						/>
+					}
 					onHeaders={<Headers />}
 				/>
 			</section>
