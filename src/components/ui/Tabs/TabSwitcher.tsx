@@ -21,7 +21,7 @@ export default function TabSwitcher({ renderContent, tabsId, upperCase = false }
 					<button
 						key={tab}
 						onClick={() => SelectHeader(tab)}
-						className={`${selectedId === tab ? styles.active : ''} relative flex flex-row items-center gap-1 px-2`}
+						className={`relative flex flex-row items-center space-x-1 px-2 ${selectedId === tab ? styles.active : ''}`}
 					>
 						{upperCase ? tab.toLocaleUpperCase() : tab}
 					</button>

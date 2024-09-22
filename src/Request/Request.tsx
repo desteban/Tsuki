@@ -14,8 +14,15 @@ export default function Request() {
 	const [params, setParams] = useState<ItemParams[]>([]);
 	const [url, setUrl] = useState<string>('');
 
-	// const activeParams = params.filter(({ active }) => active);
-	
+	const activeParams = params.filter(({ active }) => active);
+	const paramsString = new URLSearchParams();
+
+	activeParams.forEach(({ key, value }) => {
+		paramsString.append(key, value);
+	});
+
+	const urlRequest: string = `${url}${activeParams.length !== 0 ? '?' + paramsString.toString() : ''}`;
+
 	const ChangeUrl = (evt: ChangeEvent<HTMLInputElement>) => {
 		setUrl(evt.target.value);
 	};
@@ -25,7 +32,7 @@ export default function Request() {
 	};
 
 	const CopyUrl = () => {
-		navigator.clipboard.writeText(url);
+		navigator.clipboard.writeText(urlRequest);
 	};
 
 	return (
@@ -54,7 +61,7 @@ export default function Request() {
 				<div className="min mt-3 flex">
 					<input
 						className="min-w-[50%] rounded-l-md border border-[hsl(var(--input))] bg-white px-3 py-1"
-						value={url}
+						value={urlRequest}
 						disabled
 					/>
 					<button

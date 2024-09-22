@@ -1,15 +1,16 @@
 .active {
-	text-decoration: underline;
-	text-underline-offset: 4px;
+	border-bottom: 1px solid black;
+	padding-left: 0.5rem;
+	padding-right: 0.75rem;
 }
 
 .active::before {
 	content: '';
-	width: 10px;
-	height: 10px;
+	width: 8px;
+	height: 8px;
 	border-radius: 100%;
 	background-color: green;
 	position: absolute;
 	top: 9px;
-	right: -4px;
+	right: 0px;
 }
