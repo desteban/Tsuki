@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button';
 import styles from './Styles.module.css';
-import { ChangeEvent, FormEvent, useState } from 'react';
-import { Input } from '@/components/ui/input';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import ConfigurationReques from './components/ConfigurationReques';
 import Params, { ItemParams } from './components/Params';
 import Headers from './components/Headers';
@@ -9,19 +8,67 @@ import { Copy } from 'lucide-react';
 import { HttpMethods } from '@/lib/Types/HttpMethods';
 import SelectHttpMethod from './components/SelectHttpMethod';
 
+function getParamsFRomUrl(url: string): URLSearchParams {
+	try {
+		const urlParams = new URL(url).searchParams;
+		return urlParams;
+	} catch (error) {
+		return new URLSearchParams();
+	}
+}
+
 export default function Request() {
 	const [method, setMethod] = useState<HttpMethods>('GET');
 	const [params, setParams] = useState<ItemParams[]>([]);
 	const [url, setUrl] = useState<string>('');
 
-	const activeParams = params.filter(({ active }) => active);
-	const paramsString = new URLSearchParams();
+	useEffect(() => {
+		const paramsFromUrl = getParamsFRomUrl(url);
 
-	activeParams.forEach(({ key, value }) => {
-		paramsString.append(key, value);
-	});
+		if (paramsFromUrl.size >= params.length) {
+			const newParams: ItemParams[] = [...params];
+			for (const [key, value] of paramsFromUrl) {
+				const index = newParams.findIndex((param) => {
+					return key == param.key || key.slice(0, -1) == param.key || key == param.key.slice(0, -1);
+				});
 
-	const urlRequest: string = `${url}${activeParams.length !== 0 ? '?' + paramsString.toString() : ''}`;
+				if (index !== -1) {
+					newParams[index].key = key;
+					newParams[index].value = value;
+					newParams[index].active = true;
+				} else {
+					newParams.push({ key, value, active: true });
+				}
+			}
+			setParams(newParams);
+		}
+
+		if (paramsFromUrl.size < params.length) {
+			console.log('borrando');
+
+			const newParams: ItemParams[] = [];
+			const indexActive: number[] = [];
+			for (const [key, value] of paramsFromUrl) {
+				const index = params.findIndex((param) => {
+					return key == param.key || key.slice(0, -1) == param.key || key == param.key.slice(0, -1);
+				});
+
+				if (index !== -1) {
+					const auxParam = params[index];
+					auxParam.key = key;
+					auxParam.value = value;
+					auxParam.active = true;
+					newParams.push(auxParam);
+					indexActive.push(index);
+				}
+			}
+
+			const oldParams = params.filter(
+				(param, index) => !indexActive.includes(index) && !param.active,
+			);
+			setParams([...newParams, ...oldParams]);
+		}
+	}, [url]);
 
 	const ChangeUrl = (evt: ChangeEvent<HTMLInputElement>) => {
 		setUrl(evt.target.value);
@@ -32,7 +79,7 @@ export default function Request() {
 	};
 
 	const CopyUrl = () => {
-		navigator.clipboard.writeText(urlRequest);
+		navigator.clipboard.writeText(url);
 	};
 
 	return (
@@ -48,29 +95,22 @@ export default function Request() {
 							changeMethod={setMethod}
 						/>
 					</div>
-
-					<Input
-						placeholder="http://localhost:8000"
-						value={url}
-						onChange={ChangeUrl}
-					/>
+					<div className="flex w-full">
+						<input
+							className="w-full rounded-l-md border border-[hsl(var(--input))] bg-white px-3 py-1"
+							value={url}
+							onChange={ChangeUrl}
+						/>
+						<button
+							className="flex items-center justify-center rounded-r-md border border-[hsl(var(--input))] bg-accent px-2 py-1"
+							onClick={CopyUrl}
+						>
+							<Copy height={'1em'} />
+						</button>
+					</div>
 
 					<Button className={styles['btn-send']}>Send</Button>
 				</form>
-
-				<div className="min mt-3 flex">
-					<input
-						className="min-w-[50%] rounded-l-md border border-[hsl(var(--input))] bg-white px-3 py-1"
-						value={urlRequest}
-						disabled
-					/>
-					<button
-						className="flex items-center justify-center rounded-r-md border border-[hsl(var(--input))] bg-accent px-2 py-1"
-						onClick={CopyUrl}
-					>
-						<Copy height={'1em'} />
-					</button>
-				</div>
 			</section>
 
 			<section className="my-4">
@@ -79,7 +119,6 @@ export default function Request() {
 						<Params
 							params={params}
 							setParams={setParams}
-							key={'query-params'}
 						/>
 					}
 					onHeaders={<Headers />}
