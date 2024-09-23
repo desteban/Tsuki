@@ -44,8 +44,6 @@ export default function Request() {
 		}
 
 		if (paramsFromUrl.size < params.length) {
-			console.log('borrando');
-
 			const newParams: ItemParams[] = [];
 			const indexActive: number[] = [];
 			for (const [key, value] of paramsFromUrl) {
@@ -117,8 +115,10 @@ export default function Request() {
 				<ConfigurationReques
 					onParams={
 						<Params
+							url={url}
 							params={params}
 							setParams={setParams}
+							setUrl={setUrl}
 						/>
 					}
 					onHeaders={<Headers />}
