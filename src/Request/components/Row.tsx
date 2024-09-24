@@ -13,12 +13,12 @@ export interface PropsRow {
 }
 export function Row({
 	keyParam,
+	valueParam,
+	isActive,
 	changeKey,
 	changeParam,
-	valueParam,
 	deleteParam,
 	changeActive,
-	isActive,
 }: PropsRow) {
 	const inputRef = useRef<HTMLInputElement>(null);
 	const valueRef = useRef<HTMLInputElement>(null);

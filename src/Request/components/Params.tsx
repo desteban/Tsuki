@@ -42,6 +42,7 @@ export default function Params({ params, url, setParams, setUrl }: Props) {
 	const deleteParam = (indexDelete: number) => {
 		const newParams = params.filter((_, index) => index !== indexDelete);
 		setParams(newParams);
+		changeUrl(newParams);
 	};
 
 	const handleActive = (index: number) => {

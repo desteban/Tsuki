@@ -4,7 +4,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import ConfigurationReques from './components/ConfigurationReques';
 import Params, { ItemParams } from './components/Params';
 import Headers from './components/Headers';
-import { Copy } from 'lucide-react';
+import { Check, Copy } from 'lucide-react';
 import { HttpMethods } from '@/lib/Types/HttpMethods';
 import SelectHttpMethod from './components/SelectHttpMethod';
 
@@ -13,7 +13,7 @@ function getParamsFRomUrl(url: string): URLSearchParams {
 		const urlParams = new URL(url).searchParams;
 		return urlParams;
 	} catch (error) {
-		return new URLSearchParams();
+		return new URLSearchParams(url);
 	}
 }
 
@@ -21,6 +21,7 @@ export default function Request() {
 	const [method, setMethod] = useState<HttpMethods>('GET');
 	const [params, setParams] = useState<ItemParams[]>([]);
 	const [url, setUrl] = useState<string>('');
+	const [isClicked, setIsClicked] = useState<boolean>(false);
 
 	useEffect(() => {
 		const paramsFromUrl = getParamsFRomUrl(url);
@@ -78,6 +79,11 @@ export default function Request() {
 
 	const CopyUrl = () => {
 		navigator.clipboard.writeText(url);
+		setIsClicked(true);
+
+		setTimeout(() => {
+			setIsClicked(false);
+		}, 500);
 	};
 
 	return (
@@ -97,13 +103,21 @@ export default function Request() {
 						<input
 							className="w-full rounded-l-md border border-[hsl(var(--input))] bg-white px-3 py-1"
 							value={url}
+							placeholder="http://localhost:8000"
 							onChange={ChangeUrl}
 						/>
 						<button
 							className="flex items-center justify-center rounded-r-md border border-[hsl(var(--input))] bg-accent px-2 py-1"
 							onClick={CopyUrl}
 						>
-							<Copy height={'1em'} />
+							{isClicked ? (
+								<Check
+									height={'1em'}
+									className="text-green-700"
+								/>
+							) : (
+								<Copy height={'1em'} />
+							)}
 						</button>
 					</div>
 
