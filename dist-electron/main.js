@@ -21,6 +21,7 @@ function createWindow() {
     minWidth: 800,
     minHeight: 550
   });
+  win.setMenu(null);
   win.webContents.on("did-finish-load", () => {
     win == null ? void 0 : win.webContents.send("main-process-message", (/* @__PURE__ */ new Date()).toLocaleString());
   });
