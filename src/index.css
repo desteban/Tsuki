@@ -134,7 +134,7 @@ main {
 
 @layer base {
 	* {
-		@apply border-border;
+		@apply text-mercury-900 border-border;
 	}
 	body {
 		@apply bg-background text-foreground;
@@ -146,5 +146,10 @@ h1 {
 }
 
 h2 {
-	@apply text-2xl font-semibold;
+	@apply text-mercury-950 text-2xl font-semibold;
+}
+
+html,
+body {
+	@apply bg-japan-50;
 }
