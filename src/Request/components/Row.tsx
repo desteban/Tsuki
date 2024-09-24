@@ -34,21 +34,22 @@ export function Row({
 	};
 
 	return (
-		<tr className="group p-1 focus-within:bg-accent hover:bg-accent">
+		<tr className="group p-1 focus-within:bg-accent hover:bg-haiti-50">
 			<td>
-				<div className="flex items-center justify-center">
+				<label className="flex cursor-pointer items-center justify-center">
 					<input
+						className="size-4"
 						type="checkbox"
 						aria-label="active param"
 						onChange={changeActive}
 						checked={isActive}
 					/>
-				</div>
+				</label>
 			</td>
 
 			<td className={''}>
 				<Input
-					className={`group group-focus:bg-accent`}
+					className={`group border-[#e5e5e5] group-focus:bg-accent`}
 					placeholder="key"
 					value={keyParam}
 					ref={inputRef}
@@ -58,7 +59,7 @@ export function Row({
 
 			<td>
 				<Input
-					className={`group group-focus:bg-accent`}
+					className={`group border-[#e5e5e5] group-focus:bg-accent`}
 					placeholder="value"
 					value={valueParam}
 					ref={valueRef}
@@ -71,8 +72,9 @@ export function Row({
 					<button
 						onClick={deleteParam}
 						aria-label="delete param"
+						className="text-primary"
 					>
-						<TrashIcon />
+						<TrashIcon className="size-5" />
 					</button>
 				</div>
 			</td>

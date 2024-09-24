@@ -13,7 +13,13 @@ function getParamsFRomUrl(url: string): URLSearchParams {
 		const urlParams = new URL(url).searchParams;
 		return urlParams;
 	} catch (error) {
-		return new URLSearchParams(url);
+		const index = url.indexOf('?');
+		if (index > -1) {
+			const data = url.substring(index + 1);
+			return new URL(`http://localhost:8000?${data}`).searchParams;
+		}
+
+		return new URLSearchParams();
 	}
 }
 
@@ -101,22 +107,26 @@ export default function Request() {
 					</div>
 					<div className="flex w-full">
 						<input
-							className="w-full rounded-l-md border border-[hsl(var(--input))] bg-white px-3 py-1"
+							className="w-full rounded-l-md border border-haiti-800 px-3 py-1 focus:outline-haiti-900"
 							value={url}
 							placeholder="http://localhost:8000"
 							onChange={ChangeUrl}
 						/>
 						<button
-							className="flex items-center justify-center rounded-r-md border border-[hsl(var(--input))] bg-accent px-2 py-1"
+							className="flex items-center justify-center rounded-r-md border border-l-0 border-haiti-800 bg-accent px-2 py-1 !text-red-700"
 							onClick={CopyUrl}
 						>
 							{isClicked ? (
 								<Check
 									height={'1em'}
-									className="text-green-700"
+									className="stroke-green-800"
+									strokeWidth={4}
 								/>
 							) : (
-								<Copy height={'1em'} />
+								<Copy
+									height={'1em'}
+									className="stroke-mercury-950"
+								/>
 							)}
 						</button>
 					</div>
