@@ -1,11 +1,6 @@
 import { Button } from '@/components/ui/button';
-import { Row } from './Row';
-
-export type ItemParams = {
-	key: string;
-	value: string;
-	active: boolean;
-};
+import { ItemParams } from './ItemParams';
+import TableParams from './TableParams';
 
 export interface Props {
 	params: ItemParams[];
@@ -58,37 +53,12 @@ export default function Params({ params, url, setParams, setUrl }: Props) {
 			<p>Add or edit your params for the request</p>
 
 			<section aria-label="params request">
-				<table
-					className="w-full border-separate border-spacing-1"
-					aria-label="params request"
-				>
-					<thead>
-						<tr className="font-semibold">
-							<td>Active</td>
-							<td>Key</td>
-							<td>Value</td>
-						</tr>
-					</thead>
-
-					<tbody>
-						{params.map(({ key, value, active }, index) => (
-							<Row
-								key={index}
-								keyParam={key}
-								valueParam={value}
-								isActive={active}
-								deleteParam={() => deleteParam(index)}
-								changeKey={(valueInput) => {
-									handleParam(index, 'key', valueInput);
-								}}
-								changeParam={(valueInput) => {
-									handleParam(index, 'value', valueInput);
-								}}
-								changeActive={() => handleActive(index)}
-							/>
-						))}
-					</tbody>
-				</table>
+				<TableParams
+					deleteParam={deleteParam}
+					handleActive={handleActive}
+					handleParam={handleParam}
+					params={params}
+				/>
 
 				<Button
 					className="w-full"

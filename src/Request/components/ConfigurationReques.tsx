@@ -8,7 +8,7 @@ interface Props {
 
 const tabs: string[] = ["Params", "Headers", "Body"];
 
-export default function ConfigurationReques({ onParams, onHeaders }: Props) {
+export default function ConfigurationRequest({ onParams, onHeaders }: Props) {
 	const switchTab = (tab: string): ReactNode => {
 		//switch tab in tabs
 		if (tab === "Params") {

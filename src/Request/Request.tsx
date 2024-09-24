@@ -1,12 +1,10 @@
-import { Button } from '@/components/ui/button';
-import styles from './Styles.module.css';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import ConfigurationReques from './components/ConfigurationReques';
-import Params, { ItemParams } from './components/Params';
-import Headers from './components/Headers';
-import { Check, Copy } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import ConfigurationRequest from './components/ConfigurationReques';
+import Headers from './components/Headers/Headers';
 import { HttpMethods } from '@/lib/Types/HttpMethods';
-import SelectHttpMethod from './components/SelectHttpMethod';
+import FormUrl from './components/FormUrl';
+import Params from './components/Params/Params';
+import { ItemParams } from './components/Params/ItemParams';
 
 function getParamsFRomUrl(url: string): URLSearchParams {
 	try {
@@ -27,7 +25,6 @@ export default function Request() {
 	const [method, setMethod] = useState<HttpMethods>('GET');
 	const [params, setParams] = useState<ItemParams[]>([]);
 	const [url, setUrl] = useState<string>('');
-	const [isClicked, setIsClicked] = useState<boolean>(false);
 
 	useEffect(() => {
 		const paramsFromUrl = getParamsFRomUrl(url);
@@ -75,71 +72,24 @@ export default function Request() {
 		}
 	}, [url]);
 
-	const ChangeUrl = (evt: ChangeEvent<HTMLInputElement>) => {
-		setUrl(evt.target.value);
-	};
-
-	const Send = async (evt: FormEvent<HTMLFormElement>) => {
-		evt.preventDefault();
+	const Send = async () => {
 		console.log('request to', method, url);
 		const response = await fetch(url, { method: method });
 		console.log(response);
 	};
 
-	const CopyUrl = () => {
-		navigator.clipboard.writeText(url);
-		setIsClicked(true);
-
-		setTimeout(() => {
-			setIsClicked(false);
-		}, 500);
-	};
-
 	return (
 		<main>
-			<section aria-label="config of request">
-				<form
-					className={styles.form}
-					onSubmit={Send}
-				>
-					<div className="w-48">
-						<SelectHttpMethod
-							method={method}
-							changeMethod={setMethod}
-						/>
-					</div>
-					<div className="flex w-full">
-						<input
-							className="w-full rounded-l-md border border-haiti-800 px-3 py-1 focus:outline-haiti-900"
-							value={url}
-							placeholder="http://localhost:8000"
-							onChange={ChangeUrl}
-						/>
-						<button
-							className="flex items-center justify-center rounded-r-md border border-l-0 border-haiti-800 bg-[#e5e0eb] bg-accent px-2 py-1"
-							onClick={CopyUrl}
-						>
-							{isClicked ? (
-								<Check
-									height={'1em'}
-									className="stroke-green-800"
-									strokeWidth={4}
-								/>
-							) : (
-								<Copy
-									height={'1em'}
-									className="stroke-mercury-950"
-								/>
-							)}
-						</button>
-					</div>
-
-					<Button className={styles['btn-send']}>Send</Button>
-				</form>
-			</section>
+			<FormUrl
+				url={url}
+				method={method}
+				onSend={Send}
+				setUrl={setUrl}
+				setMethod={setMethod}
+			/>
 
 			<section className="my-4">
-				<ConfigurationReques
+				<ConfigurationRequest
 					onParams={
 						<Params
 							url={url}

@@ -47,7 +47,7 @@ export function Row({
 				</label>
 			</td>
 
-			<td className={''}>
+			<td width={'50%'}>
 				<Input
 					className={`group border-[#e5e5e5] group-focus:bg-accent`}
 					placeholder="key"
@@ -57,7 +57,7 @@ export function Row({
 				/>
 			</td>
 
-			<td>
+			<td width={'50%'}>
 				<Input
 					className={`group border-[#e5e5e5] group-focus:bg-accent`}
 					placeholder="value"
@@ -67,7 +67,10 @@ export function Row({
 				/>
 			</td>
 
-			<td className="flex items-center justify-center">
+			<td
+				className="flex items-center justify-center"
+				width={45}
+			>
 				<button
 					onClick={deleteParam}
 					aria-label="delete param"
