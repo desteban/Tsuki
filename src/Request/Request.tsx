@@ -79,8 +79,11 @@ export default function Request() {
 		setUrl(evt.target.value);
 	};
 
-	const Send = (evt: FormEvent<HTMLFormElement>) => {
+	const Send = async (evt: FormEvent<HTMLFormElement>) => {
 		evt.preventDefault();
+		console.log('request to', method, url);
+		const response = await fetch(url, { method: method });
+		console.log(response);
 	};
 
 	const CopyUrl = () => {
@@ -113,7 +116,7 @@ export default function Request() {
 							onChange={ChangeUrl}
 						/>
 						<button
-							className="flex items-center justify-center rounded-r-md border border-l-0 border-haiti-800 bg-accent px-2 py-1 !text-red-700"
+							className="flex items-center justify-center rounded-r-md border border-l-0 border-haiti-800 bg-[#e5e0eb] bg-accent px-2 py-1"
 							onClick={CopyUrl}
 						>
 							{isClicked ? (

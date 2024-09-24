@@ -67,16 +67,14 @@ export function Row({
 				/>
 			</td>
 
-			<td>
-				<div className="flex items-center justify-center">
-					<button
-						onClick={deleteParam}
-						aria-label="delete param"
-						className="text-primary"
-					>
-						<TrashIcon className="size-5" />
-					</button>
-				</div>
+			<td className="flex items-center justify-center">
+				<button
+					onClick={deleteParam}
+					aria-label="delete param"
+					className="rounded-full p-1 text-primary transition duration-200 hover:bg-primary hover:bg-opacity-50 hover:text-mercury-100"
+				>
+					<TrashIcon className="size-6" />
+				</button>
 			</td>
 		</tr>
 	);
