@@ -5,6 +5,7 @@ import { HttpMethods } from '@/lib/Types/HttpMethods';
 import FormUrl from './components/FormUrl';
 import Params from './components/Params/Params';
 import { ItemParams } from './components/Params/ItemParams';
+import { ItemHeader } from './components/Headers/ItemHeader';
 
 function getParamsFRomUrl(url: string): URLSearchParams {
 	try {
@@ -24,6 +25,11 @@ function getParamsFRomUrl(url: string): URLSearchParams {
 export default function Request() {
 	const [method, setMethod] = useState<HttpMethods>('GET');
 	const [params, setParams] = useState<ItemParams[]>([]);
+	const [headers, setHeaders] = useState<ItemHeader[]>([
+		{ isActive: true, key: 'Accept', value: '*/*' },
+		{ isActive: true, key: 'User-Agent', value: 'Tsuki' },
+		{ isActive: false, key: '', value: '' },
+	]);
 	const [url, setUrl] = useState<string>('');
 
 	useEffect(() => {
@@ -73,7 +79,7 @@ export default function Request() {
 	}, [url]);
 
 	const Send = async () => {
-		console.log('request to', method, url);
+		console.log('request to', method, url, headers);
 		const response = await fetch(url, { method: method });
 		console.log(response);
 	};
@@ -98,7 +104,12 @@ export default function Request() {
 							setUrl={setUrl}
 						/>
 					}
-					onHeaders={<Headers />}
+					onHeaders={
+						<Headers
+							headers={headers}
+							setHeaders={setHeaders}
+						/>
+					}
 				/>
 			</section>
 		</main>
