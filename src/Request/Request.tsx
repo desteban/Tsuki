@@ -7,6 +7,7 @@ import Params from './components/Params/Params';
 import { ItemParams } from './components/Params/ItemParams';
 import { ItemHeader } from './components/Headers/ItemHeader';
 import { FormatterHeadersInit } from '@/lib/FormatterHeadersInit';
+import { Request as RequestUrl } from '../lib/Request';
 
 function getParamsFRomUrl(url: string): URLSearchParams {
 	try {
@@ -25,7 +26,7 @@ function getParamsFRomUrl(url: string): URLSearchParams {
 
 export default function Request() {
 	const [load, setLoad] = useState<boolean>(false);
-	const Abort = useRef<AbortController | null>(null);
+	const abortController = useRef<AbortController | null>(null);
 	const [method, setMethod] = useState<HttpMethods>('GET');
 	const [params, setParams] = useState<ItemParams[]>([]);
 	const [headers, setHeaders] = useState<ItemHeader[]>([
@@ -82,12 +83,15 @@ export default function Request() {
 	}, [url]);
 
 	const Send = async () => {
-		Abort.current = new AbortController();
+		abortController.current = new AbortController();
 		setLoad(true);
-		fetch(url, { headers: FormatterHeadersInit(headers), signal: Abort.current.signal })
-			.catch((err: Error) => {
-				console.log('Abort?', err.name === 'AbortError');
-			})
+		RequestUrl({
+			url,
+			method,
+			headers: FormatterHeadersInit(headers),
+			abortController: abortController.current,
+		})
+			.then((response) => console.log('response', response))
 			.finally(() => {
 				setLoad(false);
 			});
@@ -96,7 +100,7 @@ export default function Request() {
 	const CancelReques = () => {
 		console.log('cancel....');
 
-		Abort.current?.abort();
+		abortController.current?.abort();
 		setLoad(false);
 	};
 
