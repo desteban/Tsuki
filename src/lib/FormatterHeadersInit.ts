@@ -1,4 +1,4 @@
-import { ItemHeader } from '@/Request/components/Headers/ItemHeader';
+import { ItemHeader } from '@/views/Request/components/Headers/ItemHeader';
 
 export function FormatterHeadersInit(list: ItemHeader[]): HeadersInit {
 	const headers: HeadersInit = {};

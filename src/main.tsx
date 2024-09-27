@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import './index.css';
-import Request from './Request/Request';
+import Request from './views/Request/Request';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
