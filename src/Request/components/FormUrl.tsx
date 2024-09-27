@@ -1,19 +1,29 @@
 import styles from '../Styles.module.css';
-import { Check, Copy } from 'lucide-react';
+import { Check, Copy, SendHorizontalIcon, X } from 'lucide-react';
 import SelectHttpMethod from './SelectHttpMethod';
 import { Button } from '@/components/ui/button';
 import { HttpMethods } from '@/lib/Types/HttpMethods';
 import { FormEvent, useState } from 'react';
 
 export interface UrlParams {
-	onSend: () => Promise<void> | void;
 	method: HttpMethods;
 	url: string;
+	load: boolean;
+	onSend: () => Promise<void> | void;
 	setMethod: (method: HttpMethods) => void;
 	setUrl: (url: string) => void;
+	onCancelled(): void;
 }
 
-export default function FormUrl({ onSend, method, url, setMethod, setUrl }: UrlParams) {
+export default function FormUrl({
+	onSend,
+	method,
+	url,
+	setMethod,
+	setUrl,
+	load,
+	onCancelled,
+}: UrlParams) {
 	const [isClicked, setIsClicked] = useState<boolean>(false);
 
 	const CopyUrl = () => {
@@ -26,6 +36,8 @@ export default function FormUrl({ onSend, method, url, setMethod, setUrl }: UrlP
 	};
 
 	const Send = (event: FormEvent<HTMLFormElement>) => {
+		console.log('send...');
+
 		event.preventDefault();
 		onSend();
 	};
@@ -68,7 +80,26 @@ export default function FormUrl({ onSend, method, url, setMethod, setUrl }: UrlP
 					</button>
 				</div>
 
-				<Button className={styles['btn-send']}>Send</Button>
+				{load ? (
+					<Button
+						variant={'destructive'}
+						className={'flex items-center gap-2'}
+						type="button"
+						onClick={(e) => {
+							e.preventDefault();
+							onCancelled();
+						}}
+					>
+						Cancel <X className="size-4" />
+					</Button>
+				) : (
+					<Button
+						type="submit"
+						className={'flex items-center gap-2'}
+					>
+						Send <SendHorizontalIcon className="size-4" />
+					</Button>
+				)}
 			</form>
 		</section>
 	);

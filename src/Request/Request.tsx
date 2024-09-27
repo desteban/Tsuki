@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ConfigurationRequest from './components/ConfigurationReques';
 import Headers from './components/Headers/Headers';
 import { HttpMethods } from '@/lib/Types/HttpMethods';
@@ -6,6 +6,7 @@ import FormUrl from './components/FormUrl';
 import Params from './components/Params/Params';
 import { ItemParams } from './components/Params/ItemParams';
 import { ItemHeader } from './components/Headers/ItemHeader';
+import { FormatterHeadersInit } from '@/lib/FormatterHeadersInit';
 
 function getParamsFRomUrl(url: string): URLSearchParams {
 	try {
@@ -23,6 +24,8 @@ function getParamsFRomUrl(url: string): URLSearchParams {
 }
 
 export default function Request() {
+	const [load, setLoad] = useState<boolean>(false);
+	const Abort = useRef<AbortController | null>(null);
 	const [method, setMethod] = useState<HttpMethods>('GET');
 	const [params, setParams] = useState<ItemParams[]>([]);
 	const [headers, setHeaders] = useState<ItemHeader[]>([
@@ -79,19 +82,34 @@ export default function Request() {
 	}, [url]);
 
 	const Send = async () => {
-		console.log('request to', method, url, headers);
-		const response = await fetch(url, { method: method });
-		console.log(response);
+		Abort.current = new AbortController();
+		setLoad(true);
+		fetch(url, { headers: FormatterHeadersInit(headers), signal: Abort.current.signal })
+			.catch((err: Error) => {
+				console.log('Abort?', err.name === 'AbortError');
+			})
+			.finally(() => {
+				setLoad(false);
+			});
+	};
+
+	const CancelReques = () => {
+		console.log('cancel....');
+
+		Abort.current?.abort();
+		setLoad(false);
 	};
 
 	return (
 		<main>
 			<FormUrl
+				load={load}
 				url={url}
 				method={method}
 				onSend={Send}
 				setUrl={setUrl}
 				setMethod={setMethod}
+				onCancelled={CancelReques}
 			/>
 
 			<section className="my-4">
