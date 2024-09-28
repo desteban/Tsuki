@@ -7,7 +7,7 @@ import Params from './components/Params/Params';
 import { ItemParams } from './components/Params/ItemParams';
 import { ItemHeader } from './components/Headers/ItemHeader';
 import { FormatterHeadersInit } from '@/lib/FormatterHeadersInit';
-import { Request as RequestUrl } from '../lib/Request';
+import { Request as RequestUrl } from '@lib/Request';
 
 function getParamsFRomUrl(url: string): URLSearchParams {
 	try {
