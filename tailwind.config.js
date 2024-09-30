@@ -54,7 +54,7 @@ export default {
 					5: 'hsl(var(--chart-5))',
 				},
 				haiti: {
-          DEFAULT: '#06b6d4',
+					DEFAULT: '#06b6d4',
 					50: '#f4edff',
 					100: '#eadeff',
 					200: '#dbc3ff',

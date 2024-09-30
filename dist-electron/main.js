@@ -18,7 +18,7 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, "preload.mjs")
     },
-    minWidth: 800,
+    minWidth: 1e3,
     minHeight: 550
   });
   win.setMenu(null);

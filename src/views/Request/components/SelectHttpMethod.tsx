@@ -5,14 +5,16 @@ import { SelectValue } from '@radix-ui/react-select';
 interface Props {
 	method: HttpMethods;
 	changeMethod: (method: HttpMethods) => void;
+	name?: string;
 }
 
-export default function SelectHttpMethod({ changeMethod, method }: Props) {
+export default function SelectHttpMethod({ changeMethod, method, name }: Props) {
 	return (
 		<Select
 			value={method}
 			onValueChange={changeMethod}
 			defaultValue={method}
+			name={name}
 		>
 			<SelectTrigger>
 				<SelectValue placeholder="GET" />

@@ -42,6 +42,7 @@ export default function FormUrl({ onSend, method, url, setMethod, setUrl, load, 
 					<SelectHttpMethod
 						method={method}
 						changeMethod={setMethod}
+						name="select method http"
 					/>
 				</div>
 				<div className="flex w-full">
@@ -55,6 +56,8 @@ export default function FormUrl({ onSend, method, url, setMethod, setUrl, load, 
 						className="flex items-center justify-center rounded-r-md border border-l-0 border-haiti-800 bg-[#e5e0eb] bg-accent px-2 py-1"
 						onClick={CopyUrl}
 						type="button"
+						name="copy-url"
+						aria-label="copy url"
 					>
 						{isClicked ? (
 							<Check
