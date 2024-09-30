@@ -15,15 +15,7 @@ export interface UrlParams {
 	onCancelled(): void;
 }
 
-export default function FormUrl({
-	onSend,
-	method,
-	url,
-	setMethod,
-	setUrl,
-	load,
-	onCancelled,
-}: UrlParams) {
+export default function FormUrl({ onSend, method, url, setMethod, setUrl, load, onCancelled }: UrlParams) {
 	const [isClicked, setIsClicked] = useState<boolean>(false);
 
 	const CopyUrl = () => {
@@ -64,6 +56,7 @@ export default function FormUrl({
 					<button
 						className="flex items-center justify-center rounded-r-md border border-l-0 border-haiti-800 bg-[#e5e0eb] bg-accent px-2 py-1"
 						onClick={CopyUrl}
+						type="button"
 					>
 						{isClicked ? (
 							<Check
