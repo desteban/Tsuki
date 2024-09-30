@@ -2,7 +2,7 @@ export class Either<Left, Right> {
 	private right!: Right;
 	private error!: Left;
 
-	public Error(): Left | undefined {
+	public left(): Left | undefined {
 		return this.error ?? undefined;
 	}
 
@@ -10,7 +10,7 @@ export class Either<Left, Right> {
 	 *
 	 * @returns true si tiene errores el either false si el either no cuenta con errores
 	 */
-	public errors(): boolean {
+	public whitErrors(): boolean {
 		return this.error ? true : false;
 	}
 
@@ -18,7 +18,7 @@ export class Either<Left, Right> {
 	 * @param error Error a agregar
 	 * agrega un tipo de error al either
 	 */
-	public setError(error: Left): void {
+	public setLeft(error: Left): void {
 		this.error = error;
 	}
 
@@ -27,7 +27,7 @@ export class Either<Left, Right> {
 	 * @param data Datos correctos de la tarea
 	 */
 	public setRight(data: Right): void {
-		if (this.errors()) {
+		if (this.whitErrors()) {
 			return;
 		}
 

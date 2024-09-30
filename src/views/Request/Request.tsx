@@ -7,7 +7,7 @@ import Params from './components/Params/Params';
 import { ItemParams } from './components/Params/ItemParams';
 import { headersDefault, ItemHeader } from './components/Headers/ItemHeader';
 import { FormatterHeadersInit } from '@/lib/FormatterHeadersInit';
-import { Request as RequestUrl } from '@lib/Request';
+import { RequestUrl } from '@lib/Request';
 
 function getParamsFRomUrl(url: string): URLSearchParams {
 	try {
@@ -81,16 +81,13 @@ export default function Request() {
 	const Send = async () => {
 		abortController.current = new AbortController();
 		setLoad(true);
-		RequestUrl({
+		const respuesta = await RequestUrl({
 			url,
 			method,
-			headers: FormatterHeadersInit(headers),
 			abortController: abortController.current,
-		})
-			.then((response) => console.log('response', response))
-			.finally(() => {
-				setLoad(false);
-			});
+			headers: FormatterHeadersInit(headers),
+		});
+		setLoad(false);
 	};
 
 	const CancelReques = () => {

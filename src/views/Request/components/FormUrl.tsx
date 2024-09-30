@@ -28,8 +28,6 @@ export default function FormUrl({ onSend, method, url, setMethod, setUrl, load, 
 	};
 
 	const Send = (event: FormEvent<HTMLFormElement>) => {
-		console.log('send...');
-
 		event.preventDefault();
 		onSend();
 	};
