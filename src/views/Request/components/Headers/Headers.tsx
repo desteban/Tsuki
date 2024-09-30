@@ -18,12 +18,21 @@ export default function Headers({ headers, setHeaders }: HeadersProps) {
 		//buscar si se escribe en el ultimo campo
 		if (index === headers.length - 1) {
 			newHeaders[index].isActive = true;
-			setHeaders([...newHeaders, { isActive: false, key: '', value: '' }]);
+			setHeaders([...newHeaders, { isActive: false, key: '', value: '', allowDelete: true }]);
 		} else setHeaders(newHeaders);
 	};
 
 	const deleteHeader = (indexDelete: number) => {
+		if (!headers[indexDelete].allowDelete) {
+			return;
+		}
+
+		const constHeaders = headers.filter((header) => header.allowDelete === false).length;
 		const newHeaders = headers.filter((_, index) => index !== indexDelete);
+		if (newHeaders.length <= constHeaders) {
+			newHeaders[indexDelete] = { allowDelete: true, isActive: false, key: '', value: '' };
+		}
+
 		setHeaders(newHeaders);
 	};
 

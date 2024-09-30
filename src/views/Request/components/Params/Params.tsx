@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import { ItemParams } from './ItemParams';
 import TableParams from './TableParams';
 
@@ -23,19 +22,33 @@ export default function Params({ params, url, setParams, setUrl }: Props) {
 			newUrl = url.substring(0, url.indexOf('?'));
 		}
 
-		// console.log(`${newUrl}${paramsUrl.size !== 0 ? '?' + paramsUrl.toString() : ''}`);
 		setUrl(`${newUrl}${paramsUrl.size !== 0 ? '?' + paramsUrl.toString() : ''}`);
 	};
 
-	const handleParam = (index: number, key: 'key' | 'value' | 'active', value: string | boolean) => {
-		const newParams = [...params];
-		newParams[index] = { ...newParams[index], [key]: value };
+	const handleParam = (index: number, key: 'key' | 'value', value: string) => {
+		const newParams: ItemParams[] = [...params];
+		newParams[index][key] = value;
+
+		if (index === params.length - 1) {
+			newParams[index].active = true;
+			newParams.push({ active: false, key: '', value: '' });
+		}
+
 		setParams(newParams);
 		changeUrl(newParams);
 	};
 
 	const deleteParam = (indexDelete: number) => {
-		const newParams = params.filter((_, index) => index !== indexDelete);
+		let newParams: ItemParams[] = [];
+
+		if (indexDelete === params.length - 1) {
+			newParams = [{ active: false, key: '', value: '' }];
+		}
+
+		if (indexDelete !== params.length - 1) {
+			newParams = params.filter((_, index) => index !== indexDelete);
+		}
+
 		setParams(newParams);
 		changeUrl(newParams);
 	};
@@ -59,16 +72,6 @@ export default function Params({ params, url, setParams, setUrl }: Props) {
 					handleParam={handleParam}
 					params={params}
 				/>
-
-				<Button
-					className="w-full"
-					variant={'outline'}
-					onClick={() => {
-						setParams([...params, { key: '', value: '', active: true }]);
-					}}
-				>
-					Add Param
-				</Button>
 			</section>
 		</div>
 	);

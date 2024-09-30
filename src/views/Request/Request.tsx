@@ -5,7 +5,7 @@ import { HttpMethods } from '@/lib/Types/HttpMethods';
 import FormUrl from './components/FormUrl';
 import Params from './components/Params/Params';
 import { ItemParams } from './components/Params/ItemParams';
-import { ItemHeader } from './components/Headers/ItemHeader';
+import { headersDefault, ItemHeader } from './components/Headers/ItemHeader';
 import { FormatterHeadersInit } from '@/lib/FormatterHeadersInit';
 import { Request as RequestUrl } from '@lib/Request';
 
@@ -28,11 +28,10 @@ export default function Request() {
 	const [load, setLoad] = useState<boolean>(false);
 	const abortController = useRef<AbortController | null>(null);
 	const [method, setMethod] = useState<HttpMethods>('GET');
-	const [params, setParams] = useState<ItemParams[]>([]);
+	const [params, setParams] = useState<ItemParams[]>([{ active: true, key: '', value: '' }]);
 	const [headers, setHeaders] = useState<ItemHeader[]>([
-		{ isActive: true, key: 'Accept', value: '*/*' },
-		{ isActive: true, key: 'User-Agent', value: 'Tsuki' },
-		{ isActive: false, key: '', value: '' },
+		...headersDefault,
+		{ allowDelete: true, isActive: false, key: '', value: '' },
 	]);
 	const [url, setUrl] = useState<string>('');
 
@@ -57,14 +56,13 @@ export default function Request() {
 			setParams(newParams);
 		}
 
-		if (paramsFromUrl.size < params.length) {
+		if (paramsFromUrl.size < params.length && paramsFromUrl.size !== 0) {
 			const newParams: ItemParams[] = [];
 			const indexActive: number[] = [];
 			for (const [key, value] of paramsFromUrl) {
 				const index = params.findIndex((param) => {
 					return key == param.key || key.slice(0, -1) == param.key || key == param.key.slice(0, -1);
 				});
-
 				if (index !== -1) {
 					const auxParam = params[index];
 					auxParam.key = key;
@@ -75,9 +73,7 @@ export default function Request() {
 				}
 			}
 
-			const oldParams = params.filter(
-				(param, index) => !indexActive.includes(index) && !param.active,
-			);
+			const oldParams = params.filter((param, index) => !indexActive.includes(index) && !param.active);
 			setParams([...newParams, ...oldParams]);
 		}
 	}, [url]);

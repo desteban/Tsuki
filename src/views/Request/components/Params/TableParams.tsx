@@ -4,16 +4,11 @@ import { ItemParams } from './ItemParams';
 interface TableParamsProp {
 	params: ItemParams[];
 	deleteParam: (index: number) => void;
-	handleParam: (index: number, key: 'key' | 'value' | 'active', value: string) => void;
+	handleParam: (index: number, key: 'key' | 'value', value: string) => void;
 	handleActive: (index: number) => void;
 }
 
-export default function TableParams({
-	deleteParam,
-	params,
-	handleParam,
-	handleActive,
-}: TableParamsProp) {
+export default function TableParams({ deleteParam, params, handleParam, handleActive }: TableParamsProp) {
 	return (
 		<table
 			className="w-full border-separate border-spacing-1"
