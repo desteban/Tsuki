@@ -2,6 +2,7 @@ import { app, BrowserWindow } from 'electron';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { Environment } from './Statics';
 
 createRequire(import.meta.url);
 // const require = createRequire(import.meta.url)
@@ -41,8 +42,10 @@ function createWindow() {
 		minHeight: 550,
 	});
 
-	// remove top bar
-	win.setMenu(null);
+	if (import.meta.env.VITE_APP_ENV === Environment.production) {
+		// remove top bar
+		win.setMenu(null);
+	}
 
 	// Test active push message to Renderer-process.
 	win.webContents.on('did-finish-load', () => {
