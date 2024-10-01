@@ -1,22 +1,28 @@
-import TabSwitcher from "@/components/ui/Tabs/TabSwitcher";
-import { ReactNode } from "react";
+import TabSwitcher from '@/components/ui/Tabs/TabSwitcher';
+import { ReactNode, useState } from 'react';
 
 interface Props {
 	onParams: ReactNode;
 	onHeaders: ReactNode;
+	onBody: ReactNode;
 }
 
-const tabs: string[] = ["Params", "Headers", "Body"];
+const tabs: string[] = ['Params', 'Headers', 'Body'];
 
-export default function ConfigurationRequest({ onParams, onHeaders }: Props) {
+export default function ConfigurationRequest({ onParams, onHeaders, onBody }: Props) {
+	const [tab, setTab] = useState<string>('Params');
 	const switchTab = (tab: string): ReactNode => {
 		//switch tab in tabs
-		if (tab === "Params") {
+		if (tab === 'Params') {
 			return onParams;
 		}
 
-		if (tab === "Headers") {
+		if (tab === 'Headers') {
 			return onHeaders;
+		}
+
+		if (tab === 'Body') {
+			return onBody;
 		}
 
 		return (
@@ -28,7 +34,9 @@ export default function ConfigurationRequest({ onParams, onHeaders }: Props) {
 
 	return (
 		<TabSwitcher
-			tabsId={tabs}
+			tabActive={tab}
+			handleTab={setTab}
+			tabs={tabs}
 			renderContent={switchTab}
 		/>
 	);

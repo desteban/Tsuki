@@ -8,6 +8,10 @@ import { ItemParams } from './components/Params/ItemParams';
 import { headersDefault, ItemHeader } from './components/Headers/ItemHeader';
 import { FormatterHeadersInit } from '@/lib/FormatterHeadersInit';
 import { RequestUrl } from '@lib/Request';
+import { DefaultBody, getBody, KeysDefaultBody } from './components/body/Items';
+import MainBody from './components/body/MainBody';
+import BodyForm from './components/body/BodyForm/BodyForm';
+import BodyJson from './components/body/BodyJson';
 
 function getParamsFRomUrl(url: string): URLSearchParams {
 	try {
@@ -34,6 +38,8 @@ export default function Request() {
 		{ allowDelete: true, isActive: false, key: '', value: '' },
 	]);
 	const [url, setUrl] = useState<string>('');
+	const [body, setBody] = useState<DefaultBody>({ form: new FormData(), json: {} });
+	const [keyBody, setKeyBody] = useState<KeysDefaultBody>('none');
 
 	useEffect(() => {
 		const paramsFromUrl = getParamsFRomUrl(url);
@@ -86,7 +92,12 @@ export default function Request() {
 			method,
 			abortController: abortController.current,
 			headers: FormatterHeadersInit(headers),
+			body: keyBody !== undefined ? getBody(body, keyBody) : null,
 		});
+
+		if (respuesta.isLeft()) {
+			console.error(respuesta.left);
+		}
 		setLoad(false);
 	};
 
@@ -98,7 +109,7 @@ export default function Request() {
 	};
 
 	return (
-		<main>
+		<main className="h-full">
 			<FormUrl
 				load={load}
 				url={url}
@@ -123,6 +134,21 @@ export default function Request() {
 						<Headers
 							headers={headers}
 							setHeaders={setHeaders}
+						/>
+					}
+					onBody={
+						<MainBody
+							tab={keyBody}
+							changeTab={(tab) => {
+								setKeyBody(tab as KeysDefaultBody);
+							}}
+							onBodyForm={
+								<BodyForm
+									body={body}
+									setBody={setBody}
+								/>
+							}
+							onBodyJson={<BodyJson />}
 						/>
 					}
 				/>

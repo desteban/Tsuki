@@ -1,28 +1,38 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import styles from './styles.module.css';
 
 interface Props {
-	renderContent: (header: string) => ReactNode;
-	tabsId: string[];
+	tabActive: string;
+	tabs: string[];
 	upperCase?: boolean;
 	isActive?: boolean;
+	handleTab: (tab: string) => void;
+	renderContent: (header: string) => ReactNode;
 }
 
-export default function TabSwitcher({ renderContent, tabsId, upperCase = false, isActive = true }: Props) {
-	const [selectedId, setSelectedId] = useState<string>(tabsId[0] ?? '');
+export default function TabSwitcher({
+	renderContent,
+	tabs,
+	upperCase = false,
+	isActive = true,
+	handleTab,
+	tabActive,
+}: Props) {
+	// const [selectedId, setSelectedId] = useState<string>(tabs[0] ?? '');
 
 	const SelectHeader = (tabSelected: string): void => {
-		setSelectedId(tabSelected);
+		// setSelectedId(tabSelected);
+		handleTab(tabSelected);
 	};
 
-	const Tabs = () => {
+	const ButtonTabs = () => {
 		return (
 			<div className="flex space-x-1 border-b-2 border-gray-200">
-				{tabsId.map((tab) => (
+				{tabs.map((tab) => (
 					<button
 						key={tab}
 						onClick={() => SelectHeader(tab)}
-						className={`relative flex flex-row items-center space-x-1 px-2 ${selectedId === tab && isActive ? styles.active : ''}`}
+						className={`relative flex flex-row items-center space-x-1 px-2 ${tabActive === tab && isActive ? styles.active : ''}`}
 					>
 						{upperCase ? tab.toLocaleUpperCase() : tab}
 					</button>
@@ -33,13 +43,8 @@ export default function TabSwitcher({ renderContent, tabsId, upperCase = false, 
 
 	return (
 		<div>
-			<Tabs />
-			<div
-				className="mt-6 min-h-36"
-				key={selectedId}
-			>
-				{renderContent(selectedId)}
-			</div>
+			<ButtonTabs />
+			<div className="mt-6 min-h-36">{renderContent(tabActive)}</div>
 		</div>
 	);
 }
