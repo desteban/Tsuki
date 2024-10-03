@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import ConfigurationRequest from './components/ConfigurationReques';
+import ConfigurationRequest from './components/ConfigurationRequest';
 import Headers from './components/Headers/Headers';
 import { HttpMethods } from '@/lib/Types/HttpMethods';
 import FormUrl from './components/FormUrl';
@@ -109,7 +109,7 @@ export default function Request() {
 	};
 
 	return (
-		<main className="h-full">
+		<main className="h-full overflow-auto">
 			<FormUrl
 				load={load}
 				url={url}
