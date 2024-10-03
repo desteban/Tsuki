@@ -44,7 +44,7 @@ export default function TabSwitcher({
 	return (
 		<div>
 			<ButtonTabs />
-			<div className="mt-6 min-h-36">{renderContent(tabActive)}</div>
+			<div className="min-h-36">{renderContent(tabActive)}</div>
 		</div>
 	);
 }

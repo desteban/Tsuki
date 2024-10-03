@@ -1,10 +1,10 @@
-export interface JsonItem {
-	[key: string]: string | number | boolean;
-}
+export type JsonItem = {
+	[key: string]: string | number | boolean | [] | object;
+};
 
 export interface DefaultBody {
 	form: FormData;
-	json: JsonItem;
+	json: string | undefined | null;
 }
 
 export type KeysDefaultBody = 'none' | 'form' | 'json';

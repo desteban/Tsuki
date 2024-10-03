@@ -38,7 +38,7 @@ export default function Request() {
 		{ allowDelete: true, isActive: false, key: '', value: '' },
 	]);
 	const [url, setUrl] = useState<string>('');
-	const [body, setBody] = useState<DefaultBody>({ form: new FormData(), json: {} });
+	const [body, setBody] = useState<DefaultBody>({ form: new FormData(), json: '{}	' });
 	const [keyBody, setKeyBody] = useState<KeysDefaultBody>('none');
 
 	useEffect(() => {
@@ -148,7 +148,12 @@ export default function Request() {
 									setBody={setBody}
 								/>
 							}
-							onBodyJson={<BodyJson />}
+							onBodyJson={
+								<BodyJson
+									body={body}
+									setBody={setBody}
+								/>
+							}
 						/>
 					}
 				/>

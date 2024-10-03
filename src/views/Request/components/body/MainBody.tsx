@@ -28,6 +28,7 @@ export default function MainBody({ onBodyForm, onBodyJson, changeTab, tab }: Mai
 		<section
 			id="body"
 			aria-label="body config"
+			className="py-2"
 		>
 			<TabSwitcher
 				tabActive={tab}

@@ -1,12 +1,28 @@
 import { Editor } from '@monaco-editor/react';
 import { useRef } from 'react';
 import { editor } from 'monaco-editor';
+import { Button } from '@/components/ui/button';
+import { DefaultBody } from './Items';
 
-export default function BodyJson() {
+interface BodyJsonProps {
+	body: DefaultBody;
+	setBody: (body: DefaultBody) => void;
+}
+
+export default function BodyJson({ body, setBody }: BodyJsonProps) {
 	const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
 
 	const formatEditor = () => {
 		editorRef.current?.getAction('editor.action.formatDocument')?.run();
+	};
+
+	const changeJson = (value: string | undefined) => {
+		if (value === undefined) {
+			return;
+		}
+
+		const data = value;
+		setBody({ ...body, json: data });
 	};
 
 	return (
@@ -14,21 +30,18 @@ export default function BodyJson() {
 			id="json"
 			aria-label="json of body"
 		>
-			<p>config json</p>
-
-			<button
-				onClick={formatEditor}
-				className="my-5 rounded-lg bg-white px-2 py-1 shadow-md"
-			>
-				format
-			</button>
+			<div className="my-3">
+				<Button onClick={formatEditor}>Format</Button>
+			</div>
 
 			<Editor
-				height="40vh"
+				className="h-full min-h-72"
 				defaultLanguage="json"
+				onChange={changeJson}
 				onMount={(editor) => {
 					editorRef.current = editor;
 				}}
+				value={body.json || undefined}
 			/>
 		</div>
 	);
