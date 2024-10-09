@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import ConfigurationRequest from './components/ConfigurationRequest';
 import Headers from './components/Headers/Headers';
 import { HttpMethods } from '@/lib/Types/HttpMethods';
@@ -8,12 +8,12 @@ import { ItemParams } from './components/Params/ItemParams';
 import { headersDefault, ItemHeader } from './components/Headers/ItemHeader';
 import { FormatterHeadersInit } from '@/lib/FormatterHeadersInit';
 import { RequestUrl } from '@lib/Request';
-import { DefaultBody, getBody, KeysDefaultBody } from './components/body/Items';
+import { DefaultBody, getContentBody, KeysDefaultBody } from './components/body/Items';
 import MainBody from './components/body/MainBody';
 import BodyForm from './components/body/BodyForm/BodyForm';
 import BodyJson from './components/body/BodyJson';
 
-function getParamsFRomUrl(url: string): URLSearchParams {
+function getParamsFromUrl(url: string): URLSearchParams {
 	try {
 		const urlParams = new URL(url).searchParams;
 		return urlParams;
@@ -38,51 +38,8 @@ export default function Request() {
 		{ allowDelete: true, isActive: false, key: '', value: '' },
 	]);
 	const [url, setUrl] = useState<string>('');
-	const [body, setBody] = useState<DefaultBody>({ form: new FormData(), json: '{}	' });
+	const [body, setBody] = useState<DefaultBody>({ form: new FormData(), json: '{}' });
 	const [keyBody, setKeyBody] = useState<KeysDefaultBody>('none');
-
-	useEffect(() => {
-		const paramsFromUrl = getParamsFRomUrl(url);
-
-		if (paramsFromUrl.size >= params.length) {
-			const newParams: ItemParams[] = [...params];
-			for (const [key, value] of paramsFromUrl) {
-				const index = newParams.findIndex((param) => {
-					return key == param.key || key.slice(0, -1) == param.key || key == param.key.slice(0, -1);
-				});
-
-				if (index !== -1) {
-					newParams[index].key = key;
-					newParams[index].value = value;
-					newParams[index].active = true;
-				} else {
-					newParams.push({ key, value, active: true });
-				}
-			}
-			setParams(newParams);
-		}
-
-		if (paramsFromUrl.size < params.length && paramsFromUrl.size !== 0) {
-			const newParams: ItemParams[] = [];
-			const indexActive: number[] = [];
-			for (const [key, value] of paramsFromUrl) {
-				const index = params.findIndex((param) => {
-					return key == param.key || key.slice(0, -1) == param.key || key == param.key.slice(0, -1);
-				});
-				if (index !== -1) {
-					const auxParam = params[index];
-					auxParam.key = key;
-					auxParam.value = value;
-					auxParam.active = true;
-					newParams.push(auxParam);
-					indexActive.push(index);
-				}
-			}
-
-			const oldParams = params.filter((param, index) => !indexActive.includes(index) && !param.active);
-			setParams([...newParams, ...oldParams]);
-		}
-	}, [url]);
 
 	const Send = async () => {
 		abortController.current = new AbortController();
@@ -92,7 +49,7 @@ export default function Request() {
 			method,
 			abortController: abortController.current,
 			headers: FormatterHeadersInit(headers),
-			body: keyBody !== undefined ? getBody(body, keyBody) : null,
+			body: keyBody !== undefined ? getContentBody(body, keyBody) : null,
 		});
 
 		if (respuesta.isLeft()) {
@@ -108,6 +65,28 @@ export default function Request() {
 		setLoad(false);
 	};
 
+	const handleParamsFromUrl = (url: string) => {
+		const oldParams = params.filter((param) => param.key.length !== 0 || param.value.length !== 0);
+		const paramsUrl = getParamsFromUrl(url);
+		const activeParams: { index: number; param: ItemParams }[] = [];
+		const newParams: ItemParams[] = [];
+		oldParams.map((params, index) => {
+			if (!params.active) {
+				activeParams.push({ index, param: params });
+			}
+		});
+		paramsUrl.forEach((value, key) => {
+			newParams.push({ key, value, active: true });
+		});
+
+		activeParams.map(({ index, param }) => {
+			newParams.splice(index, 0, param);
+		});
+
+		setParams([...newParams, { active: false, key: '', value: '' }]);
+		setUrl(url);
+	};
+
 	return (
 		<main className="h-full overflow-auto">
 			<FormUrl
@@ -115,7 +94,7 @@ export default function Request() {
 				url={url}
 				method={method}
 				onSend={Send}
-				setUrl={setUrl}
+				setUrl={handleParamsFromUrl}
 				setMethod={setMethod}
 				onCancelled={CancelReques}
 			/>
@@ -126,8 +105,8 @@ export default function Request() {
 						<Params
 							url={url}
 							params={params}
-							setParams={setParams}
 							setUrl={setUrl}
+							setParams={setParams}
 						/>
 					}
 					onHeaders={
@@ -151,7 +130,25 @@ export default function Request() {
 							onBodyJson={
 								<BodyJson
 									body={body}
-									setBody={setBody}
+									setBody={(body) => {
+										//obtener headers de configuración
+										const headersConfig = headers.filter((header) => !header.allowDelete);
+										//copia de los headers actuales
+										const newHeaders = [...headers];
+
+										//agregar el nuevo header a la copia
+										newHeaders.splice(headersConfig.length, 0, {
+											allowDelete: false,
+											isActive: true,
+											key: 'Content-Type',
+											value: 'application/json',
+										});
+										//actualizar los headers
+										setHeaders(newHeaders);
+
+										//actualizar el body de la petición
+										setBody(body);
+									}}
 								/>
 							}
 						/>

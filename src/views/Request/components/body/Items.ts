@@ -9,7 +9,7 @@ export interface DefaultBody {
 
 export type KeysDefaultBody = 'none' | 'form' | 'json';
 
-export function getBody(body: DefaultBody, key: KeysDefaultBody): BodyInit | null | undefined {
+export function getContentBody(body: DefaultBody, key: KeysDefaultBody): BodyInit | null | undefined {
 	if (key === 'form') {
 		return body.form;
 	}

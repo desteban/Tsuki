@@ -3,6 +3,7 @@ import { useRef } from 'react';
 import { editor } from 'monaco-editor';
 import { Button } from '@/components/ui/button';
 import { DefaultBody } from './Items';
+import { FileJson2 } from 'lucide-react';
 
 interface BodyJsonProps {
 	body: DefaultBody;
@@ -30,8 +31,18 @@ export default function BodyJson({ body, setBody }: BodyJsonProps) {
 			id="json"
 			aria-label="json of body"
 		>
-			<div className="my-3">
-				<Button onClick={formatEditor}>Format</Button>
+			<div className="float-right my-3">
+				<Button
+					variant={'ghost'}
+					onClick={formatEditor}
+					className="items-center gap-1 px-2 py-1 font-normal transition duration-200 hover:bg-purple-600 hover:text-white"
+				>
+					Format{' '}
+					<FileJson2
+						className="size-5"
+						strokeWidth={1.5}
+					/>
+				</Button>
 			</div>
 
 			<Editor

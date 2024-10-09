@@ -1,14 +1,14 @@
 import { ItemParams } from './ItemParams';
 import TableParams from './TableParams';
 
-export interface Props {
+export interface ParamsProps {
 	params: ItemParams[];
 	url: string;
 	setParams: (params: ItemParams[]) => void;
 	setUrl: (url: string) => void;
 }
 
-export default function Params({ params, url, setParams, setUrl }: Props) {
+export default function Params({ params, url, setParams, setUrl }: ParamsProps) {
 	const changeUrl = (newParams: ItemParams[]) => {
 		const paramsUrl: URLSearchParams = new URLSearchParams();
 		newParams.map(({ key, value, active }) => {

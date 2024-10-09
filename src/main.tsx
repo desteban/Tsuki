@@ -24,7 +24,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 			/>
 
 			<ResizablePanel className="">
-				{/* <div className="h-svh w-full bg-red-600"></div> */}
 				<Request />
 			</ResizablePanel>
 		</ResizablePanelGroup>
