@@ -1,9 +1,10 @@
 import styles from '../Styles.module.css';
-import { Check, Copy, SendHorizontalIcon, X } from 'lucide-react';
+import { Check, Copy, SendHorizontalIcon, SunMoon, X } from 'lucide-react';
 import SelectHttpMethod from './SelectHttpMethod';
 import { Button } from '@/components/ui/button';
 import { HttpMethods } from '@/lib/Types/HttpMethods';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
+import { ThemeContext } from '@/context/ThemeContext';
 
 export interface UrlParams {
 	method: HttpMethods;
@@ -17,6 +18,7 @@ export interface UrlParams {
 
 export default function FormUrl({ onSend, method, url, setMethod, setUrl, load, onCancelled }: UrlParams) {
 	const [isClicked, setIsClicked] = useState<boolean>(false);
+	const { changeTheme } = useContext(ThemeContext);
 
 	const CopyUrl = () => {
 		navigator.clipboard.writeText(url);
@@ -47,13 +49,13 @@ export default function FormUrl({ onSend, method, url, setMethod, setUrl, load, 
 				</div>
 				<div className="flex w-full">
 					<input
-						className="w-full rounded-l-md border border-haiti-800 px-3 py-1 focus:outline-haiti-900"
+						className="w-full rounded-l-md border border-haiti-800 px-3 py-1 focus:outline-haiti-900 dark:border-2 dark:bg-secondary"
 						value={url}
 						placeholder="http://localhost:8000"
 						onChange={(e) => setUrl(e.target.value)}
 					/>
 					<button
-						className="flex items-center justify-center rounded-r-md border border-l-0 border-haiti-800 bg-[#e5e0eb] bg-accent px-2 py-1"
+						className="flex items-center justify-center rounded-r-md border border-l-0 border-haiti-800 bg-[#e5e0eb] bg-accent px-2 py-1 dark:border-2 dark:bg-secondary dark:text-primary-foreground"
 						onClick={CopyUrl}
 						type="button"
 						name="copy-url"
@@ -68,7 +70,7 @@ export default function FormUrl({ onSend, method, url, setMethod, setUrl, load, 
 						) : (
 							<Copy
 								height={'1em'}
-								className="stroke-mercury-950"
+								className="stroke-mercury-950 dark:stroke-white"
 							/>
 						)}
 					</button>
@@ -94,6 +96,16 @@ export default function FormUrl({ onSend, method, url, setMethod, setUrl, load, 
 						Send <SendHorizontalIcon className="size-4" />
 					</Button>
 				)}
+
+				<button
+					type="button"
+					onClick={changeTheme}
+					className="pl-2 pr-1"
+					aria-label="change theme"
+					title="change theme"
+				>
+					<SunMoon size={'2rem'} />
+				</button>
 			</form>
 		</section>
 	);

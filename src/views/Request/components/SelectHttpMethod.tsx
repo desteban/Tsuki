@@ -16,7 +16,7 @@ export default function SelectHttpMethod({ changeMethod, method, name }: Props) 
 			defaultValue={method}
 			name={name}
 		>
-			<SelectTrigger>
+			<SelectTrigger className='dark:border-2 dark:text-white' >
 				<SelectValue placeholder="GET" />
 			</SelectTrigger>
 

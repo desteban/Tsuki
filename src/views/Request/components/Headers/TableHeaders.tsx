@@ -16,10 +16,10 @@ export default function TableHeaders({ headers, deleteHeader, handleActive, hand
 		>
 			<thead>
 				<tr className="font-semibold">
-					<td>Active</td>
-					<td>Key</td>
-					<td>Value</td>
-					<td></td>
+					<td className="dark:text-primary-foreground">Active</td>
+					<td className="dark:text-primary-foreground">Key</td>
+					<td className="dark:text-primary-foreground">Value</td>
+					<td className="dark:text-primary-foreground"></td>
 				</tr>
 			</thead>
 

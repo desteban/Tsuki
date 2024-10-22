@@ -34,7 +34,7 @@ export function Row({
 	};
 
 	return (
-		<tr className="group p-1 focus-within:bg-accent hover:bg-haiti-50">
+		<tr className="group p-1 focus-within:bg-accent hover:bg-haiti-50 dark:hover:bg-secondary dark:bg-opacity-70 dark:focus-within:bg-secondary">
 			<td>
 				<label className="flex cursor-pointer items-center justify-center">
 					<input

@@ -14,13 +14,14 @@ export interface MainBodyProps {
 }
 
 export default function MainBody({ onBodyForm, onBodyJson, changeTab, tab, headers, setHeaders }: MainBodyProps) {
-	const tabs: string[] = ['none', 'json', 'form'];
+	const tabs: string[] = ['none', 'json', 'form', 'form-encoded'];
 
 	useEffect(() => {
 		const KeyHeader = 'Content-Type';
 		const switchHeaderFromTab = {
 			json: HeadersBody.json,
 			form: HeadersBody.form,
+			'form-encoded': HeadersBody.xForm,
 			none: null,
 		};
 
@@ -52,6 +53,10 @@ export default function MainBody({ onBodyForm, onBodyJson, changeTab, tab, heade
 	const switchTab = (key: string) => {
 		if (key === 'form') {
 			return onBodyForm;
+		}
+
+		if (key === 'form-encoded') {
+			return null;
 		}
 
 		if (key === 'json') {

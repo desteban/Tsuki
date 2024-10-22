@@ -11,13 +11,7 @@ interface PropsRowHeaders {
 	changeActive: () => void;
 }
 
-export default function Row({
-	header,
-	changeActive,
-	changeKey,
-	changeParam,
-	deleteParam,
-}: PropsRowHeaders) {
+export default function Row({ header, changeActive, changeKey, changeParam, deleteParam }: PropsRowHeaders) {
 	const inputRef = useRef<HTMLInputElement>(null);
 	const valueRef = useRef<HTMLInputElement>(null);
 
@@ -32,7 +26,7 @@ export default function Row({
 	};
 
 	return (
-		<tr className="group p-1 focus-within:bg-accent hover:bg-haiti-50">
+		<tr className="group p-1 focus-within:bg-accent hover:bg-haiti-50 dark:bg-opacity-70 dark:focus-within:bg-secondary dark:hover:bg-secondary">
 			<td>
 				<label className="flex cursor-pointer items-center justify-center">
 					<input
