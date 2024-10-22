@@ -78,6 +78,8 @@ export default function Request() {
 					}
 					onBody={
 						<MainBody
+							headers={headers}
+							setHeaders={setHeaders}
 							tab={keyBody}
 							changeTab={(tab) => {
 								setKeyBody(tab as KeysDefaultBody);
@@ -91,25 +93,7 @@ export default function Request() {
 							onBodyJson={
 								<BodyJson
 									body={body}
-									setBody={(body) => {
-										//obtener headers de configuración
-										const headersConfig = headers.filter((header) => !header.allowDelete);
-										//copia de los headers actuales
-										const newHeaders = [...headers];
-
-										//agregar el nuevo header a la copia
-										newHeaders.splice(headersConfig.length, 0, {
-											allowDelete: false,
-											isActive: true,
-											key: 'Content-Type',
-											value: 'application/json',
-										});
-										//actualizar los headers
-										setHeaders(newHeaders);
-
-										//actualizar el body de la petición
-										setBody(body);
-									}}
+									setBody={setBody}
 								/>
 							}
 						/>
