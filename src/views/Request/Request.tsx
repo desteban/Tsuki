@@ -4,42 +4,23 @@ import Headers from './components/Headers/Headers';
 import { HttpMethods } from '@/lib/Types/HttpMethods';
 import FormUrl from './components/FormUrl';
 import Params from './components/Params/Params';
-import { ItemParams } from './components/Params/ItemParams';
-import { headersDefault, ItemHeader } from './components/Headers/ItemHeader';
 import { FormatterHeadersInit } from '@/lib/FormatterHeadersInit';
 import { RequestUrl } from '@lib/Request';
-import { DefaultBody, getContentBody, KeysDefaultBody } from './components/body/Items';
+import { getContentBody, KeysDefaultBody } from './components/body/Items';
 import MainBody from './components/body/MainBody';
 import BodyForm from './components/body/BodyForm/BodyForm';
 import BodyJson from './components/body/BodyJson';
-
-function getParamsFromUrl(url: string): URLSearchParams {
-	try {
-		const urlParams = new URL(url).searchParams;
-		return urlParams;
-	} catch (error) {
-		const index = url.indexOf('?');
-		if (index > -1) {
-			const data = url.substring(index + 1);
-			return new URL(`http://localhost:8000?${data}`).searchParams;
-		}
-
-		return new URLSearchParams();
-	}
-}
+import { useHeaders } from './Hooks/useHeaders';
+import { useUrl } from './Hooks/useUrl';
+import { useBody } from './Hooks/useBody';
 
 export default function Request() {
 	const [load, setLoad] = useState<boolean>(false);
 	const abortController = useRef<AbortController | null>(null);
 	const [method, setMethod] = useState<HttpMethods>('GET');
-	const [params, setParams] = useState<ItemParams[]>([{ active: true, key: '', value: '' }]);
-	const [headers, setHeaders] = useState<ItemHeader[]>([
-		...headersDefault,
-		{ allowDelete: true, isActive: false, key: '', value: '' },
-	]);
-	const [url, setUrl] = useState<string>('');
-	const [body, setBody] = useState<DefaultBody>({ form: new FormData(), json: '{}' });
-	const [keyBody, setKeyBody] = useState<KeysDefaultBody>('none');
+	const { params, setParams, setUrl, url, handleParamsFromUrl } = useUrl();
+	const { headers, setHeaders, deleteHeader, handleHeader } = useHeaders();
+	const { body, keyBody, setBody, setKeyBody } = useBody();
 
 	const Send = async () => {
 		abortController.current = new AbortController();
@@ -58,33 +39,11 @@ export default function Request() {
 		setLoad(false);
 	};
 
-	const CancelReques = () => {
+	const CancelRequest = () => {
 		console.log('cancel....');
 
 		abortController.current?.abort();
 		setLoad(false);
-	};
-
-	const handleParamsFromUrl = (url: string) => {
-		const oldParams = params.filter((param) => param.key.length !== 0 || param.value.length !== 0);
-		const paramsUrl = getParamsFromUrl(url);
-		const activeParams: { index: number; param: ItemParams }[] = [];
-		const newParams: ItemParams[] = [];
-		oldParams.map((params, index) => {
-			if (!params.active) {
-				activeParams.push({ index, param: params });
-			}
-		});
-		paramsUrl.forEach((value, key) => {
-			newParams.push({ key, value, active: true });
-		});
-
-		activeParams.map(({ index, param }) => {
-			newParams.splice(index, 0, param);
-		});
-
-		setParams([...newParams, { active: false, key: '', value: '' }]);
-		setUrl(url);
 	};
 
 	return (
@@ -96,7 +55,7 @@ export default function Request() {
 				onSend={Send}
 				setUrl={handleParamsFromUrl}
 				setMethod={setMethod}
-				onCancelled={CancelReques}
+				onCancelled={CancelRequest}
 			/>
 
 			<section className="my-4">
@@ -113,6 +72,8 @@ export default function Request() {
 						<Headers
 							headers={headers}
 							setHeaders={setHeaders}
+							deleteHeader={deleteHeader}
+							handleHeader={handleHeader}
 						/>
 					}
 					onBody={
