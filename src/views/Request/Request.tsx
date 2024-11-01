@@ -1,24 +1,16 @@
-import { useRef, useState } from 'react';
 import ConfigurationRequest from './components/ConfigurationRequest';
 import Headers from './components/Headers/Headers';
-import { HttpMethods } from '@/lib/Types/HttpMethods';
 import FormUrl from './components/FormUrl';
 import Params from './components/Params/Params';
 import { FormatterHeadersInit } from '@/lib/FormatterHeadersInit';
 import { RequestUrl } from '@lib/Request';
 import { getContentBody, KeysDefaultBody } from './components/body/Items';
 import { BodyForm, MainBody, BodyJson } from './components/body';
-import { useHeaders } from './Hooks/useHeaders';
-import { useUrl } from './Hooks/useUrl';
-import { useBody } from './Hooks/useBody';
+import { useRequest } from './Hooks/useRequest';
 
 export default function Request() {
-	const [load, setLoad] = useState<boolean>(false);
-	const abortController = useRef<AbortController | null>(null);
-	const [method, setMethod] = useState<HttpMethods>('GET');
-	const { params, setParams, setUrl, url, handleParamsFromUrl } = useUrl();
-	const { headers, setHeaders, deleteHeader, handleHeader } = useHeaders();
-	const { body, keyBody, setBody, setKeyBody } = useBody();
+	const hookRequest = useRequest();
+	const { abortController, setLoad, setKeyBody, url, method, headers, keyBody, body } = hookRequest;
 
 	const Send = async () => {
 		abortController.current = new AbortController();
@@ -47,12 +39,12 @@ export default function Request() {
 	return (
 		<main className="h-full overflow-auto">
 			<FormUrl
-				load={load}
-				url={url}
-				method={method}
+				load={hookRequest.load}
+				url={hookRequest.url}
+				method={hookRequest.method}
+				setUrl={hookRequest.handleParamsFromUrl}
+				setMethod={hookRequest.setMethod}
 				onSend={Send}
-				setUrl={handleParamsFromUrl}
-				setMethod={setMethod}
 				onCancelled={CancelRequest}
 			/>
 
@@ -60,38 +52,38 @@ export default function Request() {
 				<ConfigurationRequest
 					onParams={
 						<Params
-							url={url}
-							params={params}
-							setUrl={setUrl}
-							setParams={setParams}
+							url={hookRequest.url}
+							params={hookRequest.params}
+							setUrl={hookRequest.setUrl}
+							setParams={hookRequest.setParams}
 						/>
 					}
 					onHeaders={
 						<Headers
-							headers={headers}
-							setHeaders={setHeaders}
-							deleteHeader={deleteHeader}
-							handleHeader={handleHeader}
+							headers={hookRequest.headers}
+							setHeaders={hookRequest.setHeaders}
+							deleteHeader={hookRequest.deleteHeader}
+							handleHeader={hookRequest.handleHeader}
 						/>
 					}
 					onBody={
 						<MainBody
-							headers={headers}
-							setHeaders={setHeaders}
-							tab={keyBody}
+							headers={hookRequest.headers}
+							setHeaders={hookRequest.setHeaders}
+							tab={hookRequest.keyBody}
 							changeTab={(tab) => {
 								setKeyBody(tab as KeysDefaultBody);
 							}}
 							onBodyForm={
 								<BodyForm
-									body={body}
-									setBody={setBody}
+									body={hookRequest.body}
+									setBody={hookRequest.setBody}
 								/>
 							}
 							onBodyJson={
 								<BodyJson
-									body={body}
-									setBody={setBody}
+									body={hookRequest.body}
+									setBody={hookRequest.setBody}
 								/>
 							}
 						/>

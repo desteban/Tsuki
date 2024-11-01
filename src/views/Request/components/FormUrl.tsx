@@ -49,7 +49,7 @@ export default function FormUrl({ onSend, method, url, setMethod, setUrl, load, 
 				</div>
 				<div className="flex w-full">
 					<input
-						className="w-full rounded-l-md border border-haiti-800 px-3 py-1 focus:outline-haiti-900 dark:border-2 dark:bg-secondary"
+						className="w-full rounded-l-md border border-haiti-800 px-3 py-1 focus:outline-haiti-900 dark:border-2 dark:bg-secondary dark:text-white dark:placeholder:text-slate-300"
 						value={url}
 						placeholder="http://localhost:8000"
 						onChange={(e) => setUrl(e.target.value)}
