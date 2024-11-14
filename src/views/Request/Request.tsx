@@ -8,7 +8,11 @@ import { getContentBody, KeysDefaultBody } from './components/body/Items';
 import { BodyForm, MainBody, BodyJson } from './components/body';
 import { useRequest } from './Hooks/useRequest';
 
-export default function Request() {
+interface RequestProps {
+	setResponse: (response: Response | null) => void;
+}
+
+export default function Request({ setResponse }: RequestProps) {
 	const hookRequest = useRequest();
 	const { abortController, setLoad, setKeyBody, url, method, headers, keyBody, body } = hookRequest;
 
@@ -23,10 +27,17 @@ export default function Request() {
 			body: keyBody !== undefined ? getContentBody(body, keyBody) : null,
 		});
 
+		setLoad(false);
 		if (respuesta.isLeft()) {
 			console.error(respuesta.left);
+			// setResponse(null)
 		}
-		setLoad(false);
+
+		if (respuesta.isRight()) {
+			setResponse(respuesta.Right());
+			// const d = await respuesta.Right().text();
+			// console.log(d);
+		}
 	};
 
 	const CancelRequest = () => {
