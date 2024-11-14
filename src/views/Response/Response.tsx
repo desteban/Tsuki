@@ -1,7 +1,5 @@
-import { ThemesEditor } from '@/lib/Types/ThemesEditor';
-import { Editor } from '@monaco-editor/react';
-import { editor } from 'monaco-editor';
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { Editor } from '@/components/ui/Editor';
+import { Suspense, useEffect, useState } from 'react';
 
 async function getJsonToResponse(response: Response) {
 	try {
@@ -14,7 +12,6 @@ async function getJsonToResponse(response: Response) {
 
 export default function Response({ res }: { res: Response }) {
 	const [jsonFromResponse, setJsonFromResponse] = useState<object | null>(null);
-	const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
 
 	useEffect(() => {
 		getJsonToResponse(res)
@@ -25,16 +22,11 @@ export default function Response({ res }: { res: Response }) {
 	const RenderJson = () => (
 		<Suspense fallback={'Cargando...'}>
 			<div className="flex h-full w-full flex-col bg-secondary p-3">
-				<h1>Respuesta json</h1>
+				<h1>Response</h1>
 				<div className="h-full">
 					<Editor
-						value={JSON.stringify(jsonFromResponse, null, 2) || undefined}
-						theme={ThemesEditor.dark}
 						className="h-full w-full"
-						defaultLanguage="json"
-						onMount={(editor) => {
-							editorRef.current = editor;
-						}}
+						value={JSON.stringify(jsonFromResponse, null, 2) || undefined}
 					/>
 				</div>
 			</div>

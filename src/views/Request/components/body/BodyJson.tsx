@@ -1,9 +1,7 @@
-import { Editor } from '@monaco-editor/react';
-import { useRef } from 'react';
-import { editor } from 'monaco-editor';
 import { Button } from '@/components/ui/button';
 import { DefaultBody } from './Items';
 import { FileJson2 } from 'lucide-react';
+import { Editor, useRefEditor } from '@/components/ui/Editor';
 
 interface BodyJsonProps {
 	body: DefaultBody;
@@ -11,7 +9,7 @@ interface BodyJsonProps {
 }
 
 export default function BodyJson({ body, setBody }: BodyJsonProps) {
-	const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+	const editorRef = useRefEditor();
 
 	const formatEditor = () => {
 		editorRef.current?.getAction('editor.action.formatDocument')?.run();
@@ -21,7 +19,6 @@ export default function BodyJson({ body, setBody }: BodyJsonProps) {
 		if (value === undefined) {
 			return;
 		}
-
 		const data = value;
 		setBody({ ...body, json: data });
 	};
@@ -37,7 +34,7 @@ export default function BodyJson({ body, setBody }: BodyJsonProps) {
 					onClick={formatEditor}
 					className="items-center gap-1 px-2 py-1 font-normal transition duration-200 hover:bg-purple-600 hover:text-white"
 				>
-					Format{' '}
+					Format
 					<FileJson2
 						className="size-5"
 						strokeWidth={1.5}
@@ -46,12 +43,9 @@ export default function BodyJson({ body, setBody }: BodyJsonProps) {
 			</div>
 
 			<Editor
-				className="h-full min-h-72"
-				defaultLanguage="json"
+				className="h-full"
 				onChange={changeJson}
-				onMount={(editor) => {
-					editorRef.current = editor;
-				}}
+				refEditor={editorRef}
 				value={body.json || undefined}
 			/>
 		</div>
