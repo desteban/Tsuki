@@ -1,39 +1,51 @@
 import { Editor } from '@/components/ui/Editor';
 import { Suspense, useEffect, useState } from 'react';
+import HeaderResponse from './components/HeaderResponse';
 
 async function getJsonToResponse(response: Response) {
 	try {
-		const json = await response.json();
+		const clone = response.clone();
+		const json = await clone.json();
 		return json;
 	} catch (error) {
 		return null;
 	}
 }
 
-export default function Response({ res }: { res: Response }) {
+export default function Response({ response }: { response: Response }) {
 	const [jsonFromResponse, setJsonFromResponse] = useState<object | null>(null);
+	const [size, setSize] = useState<string>('');
 
 	useEffect(() => {
-		getJsonToResponse(res)
+		getJsonToResponse(response)
 			.then((json) => setJsonFromResponse(json))
 			.catch((err) => console.error('fail:', err));
-	}, [res]);
+	}, [response]);
+
+	const cloneResponse = response.clone();
+	cloneResponse.arrayBuffer().then((buffer) => {
+		const sizeInBytes = buffer.byteLength;
+		setSize((sizeInBytes / 1000).toFixed(2) + '');
+	});
 
 	const RenderJson = () => (
 		<Suspense fallback={'Cargando...'}>
-			<div className="flex h-full w-full flex-col">
-				<div className="h-full">
-					<Editor
-						className="h-full w-full"
-						value={JSON.stringify(jsonFromResponse, null, 2) || undefined}
-					/>
-				</div>
+			<div className="h-full">
+				<Editor
+					readOnly
+					className=""
+					value={JSON.stringify(jsonFromResponse, null, 2) || undefined}
+				/>
 			</div>
 		</Suspense>
 	);
 
 	return (
-		<section className="h-full w-full">
+		<section className="flex h-full w-full flex-col">
+			<HeaderResponse
+				code={response.status}
+				size={size}
+			/>
 			<RenderJson />
 		</section>
 	);

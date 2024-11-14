@@ -7,14 +7,23 @@ import { editor } from 'monaco-editor';
 interface PropsEditor {
 	className?: string;
 	onChange?: (value: string | undefined) => void;
+	readOnly?: boolean;
+	refEditor?: MutableRefObject<editor.IStandaloneCodeEditor | null>;
 	theme?: ThemesEditor;
 	value?: string | undefined;
-	refEditor?: MutableRefObject<editor.IStandaloneCodeEditor | null>;
 }
 
-export function Editor({ onChange, value, theme = ThemesEditor.dark, className = '', refEditor }: PropsEditor) {
+export function Editor({
+	className = '',
+	onChange,
+	readOnly = false,
+	refEditor,
+	theme = ThemesEditor.dark,
+	value,
+}: PropsEditor) {
 	return (
 		<EditorMonaco
+			options={{ readOnly }}
 			className={className}
 			defaultLanguage={LanguageEditor.json}
 			theme={theme}

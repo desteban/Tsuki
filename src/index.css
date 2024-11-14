@@ -72,10 +72,6 @@ svg {
 	}
 }
 
-main {
-	padding: 0.5rem 1.25rem;
-}
-
 @layer base {
 	:root {
 		--background: 0 0% 100%;
@@ -152,6 +148,10 @@ h1 {
 
 h2 {
 	@apply text-2xl font-semibold text-mercury-950 dark:text-primary-foreground;
+}
+
+h3 {
+	@apply text-xl font-semibold text-mercury-950 dark:text-primary-foreground;
 }
 
 button {

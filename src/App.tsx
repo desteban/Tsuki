@@ -14,13 +14,16 @@ export default function App() {
 
 		return (
 			<>
-				<ResizableHandle />
+				<ResizableHandle
+					withHandle
+					className="dark:text-primary"
+				/>
 
-				<ResizablePanel defaultSize={50} className='min-w-[30%]'>
-					<section className="h-full bg-secondary p-3">
-						<h2>Response</h2>
-						{res ? <Response res={res} /> : null}
-					</section>
+				<ResizablePanel
+					defaultSize={50}
+					className="h-svh min-w-[30%]"
+				>
+					<section className="h-svh py-3 px-2">{res ? <Response response={res} /> : null}</section>
 				</ResizablePanel>
 			</>
 		);
@@ -28,18 +31,23 @@ export default function App() {
 
 	return (
 		<ThemeContextProvider>
-			<ResizablePanelGroup
-				direction="horizontal"
-				className="h-svh max-h-svh"
-			>
-				<ResizablePanel defaultSize={50} className='min-w-[30%]'>
-					<section className="h-svh">
-						<Request setResponse={setRespuesta} />
-					</section>
-				</ResizablePanel>
+			<main>
+				<ResizablePanelGroup
+					direction="horizontal"
+					className="h-svh max-h-svh"
+				>
+					<ResizablePanel
+						defaultSize={50}
+						className="min-w-[30%]"
+					>
+						<section className="h-svh py-3 px-2">
+							<Request setResponse={setRespuesta} />
+						</section>
+					</ResizablePanel>
 
-				<ShowResponse />
-			</ResizablePanelGroup>
+					<ShowResponse />
+				</ResizablePanelGroup>
+			</main>
 		</ThemeContextProvider>
 	);
 }

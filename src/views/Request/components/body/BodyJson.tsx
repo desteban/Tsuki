@@ -43,7 +43,7 @@ export default function BodyJson({ body, setBody }: BodyJsonProps) {
 			</div>
 
 			<Editor
-				className="h-full"
+				className="min-h-80"
 				onChange={changeJson}
 				refEditor={editorRef}
 				value={body.json || undefined}

@@ -41,14 +41,12 @@ export default function Request({ setResponse }: RequestProps) {
 	};
 
 	const CancelRequest = () => {
-		console.log('cancel....');
-
 		abortController.current?.abort();
 		setLoad(false);
 	};
 
 	return (
-		<main className="h-full overflow-auto">
+		<div className="h-full overflow-auto">
 			<FormUrl
 				load={hookRequest.load}
 				url={hookRequest.url}
@@ -101,6 +99,6 @@ export default function Request({ setResponse }: RequestProps) {
 					}
 				/>
 			</section>
-		</main>
+		</div>
 	);
 }
