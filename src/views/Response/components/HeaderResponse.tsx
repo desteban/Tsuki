@@ -1,6 +1,7 @@
 interface HeaderResponseProps {
 	code: number;
 	size?: string | number;
+	time?: string | number;
 }
 
 function getColorStatus(code: number): string {
@@ -27,15 +28,19 @@ function getColorStatus(code: number): string {
 	return '!text-black';
 }
 
-export default function HeaderResponse({ code, size }: HeaderResponseProps) {
+export default function HeaderResponse({ code, size, time }: HeaderResponseProps) {
 	return (
-		<div className="flex border-b border-white p-2 space-x-6">
+		<div className="flex space-x-6 border-b border-white p-2">
 			<h3 className="text-base">
 				Status: <span className={`${getColorStatus(code)} font-bold`}>{code}</span>
 			</h3>
 
 			<h3 className="text-base">
 				Size: <span className={`${getColorStatus(code)} font-bold`}>{size} KB</span>
+			</h3>
+
+			<h3 className="text-base">
+				Time: <span className={`${getColorStatus(code)} font-bold`}>{time} ms</span>
 			</h3>
 		</div>
 	);

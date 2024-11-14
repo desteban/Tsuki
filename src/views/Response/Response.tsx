@@ -1,6 +1,7 @@
 import { Editor } from '@/components/ui/Editor';
 import { Suspense, useEffect, useState } from 'react';
 import HeaderResponse from './components/HeaderResponse';
+import { DataResponse } from '@/lib/RequestUrl';
 
 async function getJsonToResponse(response: Response) {
 	try {
@@ -12,21 +13,14 @@ async function getJsonToResponse(response: Response) {
 	}
 }
 
-export default function Response({ response }: { response: Response }) {
+export default function Response({ dataResponse: { response, size, time } }: { dataResponse: DataResponse }) {
 	const [jsonFromResponse, setJsonFromResponse] = useState<object | null>(null);
-	const [size, setSize] = useState<string>('');
 
 	useEffect(() => {
 		getJsonToResponse(response)
 			.then((json) => setJsonFromResponse(json))
 			.catch((err) => console.error('fail:', err));
 	}, [response]);
-
-	const cloneResponse = response.clone();
-	cloneResponse.arrayBuffer().then((buffer) => {
-		const sizeInBytes = buffer.byteLength;
-		setSize((sizeInBytes / 1000).toFixed(2) + '');
-	});
 
 	const RenderJson = () => (
 		<Suspense fallback={'Cargando...'}>
@@ -45,6 +39,7 @@ export default function Response({ response }: { response: Response }) {
 			<HeaderResponse
 				code={response.status}
 				size={size}
+				time={time}
 			/>
 			<RenderJson />
 		</section>

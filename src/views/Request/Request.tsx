@@ -3,13 +3,14 @@ import Headers from './components/Headers/Headers';
 import FormUrl from './components/FormUrl';
 import Params from './components/Params/Params';
 import { FormatterHeadersInit } from '@/lib/FormatterHeadersInit';
-import { RequestUrl } from '@lib/Request';
+import { RequestUrl } from '@lib/RequestUrl';
 import { getContentBody, KeysDefaultBody } from './components/body/Items';
 import { BodyForm, MainBody, BodyJson } from './components/body';
 import { useRequest } from './Hooks/useRequest';
+import { DataResponse } from '@/lib/RequestUrl';
 
 interface RequestProps {
-	setResponse: (response: Response | null) => void;
+	setResponse: (response: DataResponse | null) => void;
 }
 
 export default function Request({ setResponse }: RequestProps) {
@@ -30,13 +31,10 @@ export default function Request({ setResponse }: RequestProps) {
 		setLoad(false);
 		if (respuesta.isLeft()) {
 			console.error(respuesta.left);
-			// setResponse(null)
 		}
 
 		if (respuesta.isRight()) {
 			setResponse(respuesta.Right());
-			// const d = await respuesta.Right().text();
-			// console.log(d);
 		}
 	};
 
