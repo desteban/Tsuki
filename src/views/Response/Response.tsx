@@ -21,8 +21,7 @@ export default function Response({ res }: { res: Response }) {
 
 	const RenderJson = () => (
 		<Suspense fallback={'Cargando...'}>
-			<div className="flex h-full w-full flex-col bg-secondary p-3">
-				<h1>Response</h1>
+			<div className="flex h-full w-full flex-col">
 				<div className="h-full">
 					<Editor
 						className="h-full w-full"
