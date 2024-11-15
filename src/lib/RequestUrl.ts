@@ -14,10 +14,10 @@ type RequestProps = {
 type ErrorRequest = AbortController | ConnectionFailed | RequestFailed | Error;
 
 export type DataResponse = {
-	size: string,
-	time: string,
-	response: Response
-}
+	size: string;
+	time: string;
+	response: Response;
+};
 
 export async function RequestUrl({
 	url,
@@ -43,10 +43,10 @@ export async function RequestUrl({
 			either.setLeft(new RequestFailed());
 		}
 
-		const buffer = await response.clone().arrayBuffer()
-		const size = (buffer.byteLength / 1000).toFixed(2)
+		const buffer = await response.clone().arrayBuffer();
+		const size = (buffer.byteLength / 1000).toFixed(2);
 
-		either.setRight({time: elapsedTime, response, size});
+		either.setRight({ time: elapsedTime, response, size });
 	} catch (error) {
 		either.setLeft(error as Error);
 		if (error instanceof DOMException && error.name === 'AbortError') {
