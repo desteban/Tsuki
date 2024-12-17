@@ -9,11 +9,7 @@ interface BodyJsonProps {
 }
 
 export default function BodyJson({ body, setBody }: BodyJsonProps) {
-	const editorRef = useRefEditor();
-
-	const formatEditor = () => {
-		editorRef.current?.getAction('editor.action.formatDocument')?.run();
-	};
+	const {editorRef, formatEditor} = useRefEditor();
 
 	const changeJson = (value: string | undefined) => {
 		if (value === undefined) {

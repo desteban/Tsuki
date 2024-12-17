@@ -29,7 +29,7 @@ export function Editor({
 			theme={theme}
 			onChange={onChange}
 			onMount={(editor) => {
-				if (refEditor?.current) {
+				if (refEditor !== undefined) {
 					refEditor.current = editor;
 				}
 			}}
