@@ -42,7 +42,7 @@ export default function Params({ params, url, setParams, setUrl }: ParamsProps) 
 		let newParams: ItemParams[] = [];
 
 		if (indexDelete === params.length - 1) {
-			newParams = [{ active: false, key: '', value: '' }];
+			return;
 		}
 
 		if (indexDelete !== params.length - 1) {
