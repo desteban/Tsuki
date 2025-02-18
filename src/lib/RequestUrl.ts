@@ -7,7 +7,7 @@ type RequestProps = {
 	url: string;
 	headers?: HeadersInit;
 	abortController?: AbortController;
-	method?: HttpMethods;
+	methodType?: HttpMethods;
 	body?: BodyInit | null;
 };
 
@@ -24,7 +24,7 @@ export async function RequestUrl({
 	abortController,
 	body,
 	headers,
-	method = 'GET',
+	methodType: method = 'GET',
 }: RequestProps): Promise<Either<ErrorRequest, DataResponse>> {
 	let bodyRequest: BodyInit | null | undefined = body;
 	const either = new Either<ErrorRequest, DataResponse>();

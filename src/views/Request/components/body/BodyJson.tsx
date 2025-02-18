@@ -9,7 +9,7 @@ interface BodyJsonProps {
 }
 
 export default function BodyJson({ body, setBody }: BodyJsonProps) {
-	const {editorRef, formatEditor} = useRefEditor();
+	const { editorRef, formatEditor } = useRefEditor();
 
 	const changeJson = (value: string | undefined) => {
 		if (value === undefined) {
@@ -26,7 +26,7 @@ export default function BodyJson({ body, setBody }: BodyJsonProps) {
 		>
 			<div className="float-right my-3">
 				<Button
-					variant={'ghost'}
+					variant="outline"
 					onClick={formatEditor}
 					className="items-center gap-1 px-2 py-1 font-normal transition duration-200 hover:bg-purple-600 hover:text-white"
 				>

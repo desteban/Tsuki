@@ -22,7 +22,7 @@ export default function Request({ setResponse }: RequestProps) {
 		setLoad(true);
 		const respuesta = await RequestUrl({
 			url,
-			method,
+			methodType: method,
 			abortController: abortController.current,
 			headers: FormatterHeadersInit(headers),
 			body: keyBody !== undefined ? getContentBody(body, keyBody) : null,

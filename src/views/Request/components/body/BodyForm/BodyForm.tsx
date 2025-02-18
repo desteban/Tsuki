@@ -1,6 +1,6 @@
 import { BodyComponentsProps } from '../Items';
 
-export default function BodyForm({ body, setBody }: BodyComponentsProps) {
+export default function BodyForm({}: BodyComponentsProps) {
 	return (
 		<div
 			id="bodyForm"
