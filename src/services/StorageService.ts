@@ -1,4 +1,4 @@
-import { RequestModel } from '@/lib/Interfaces/RequestModel';
+import { RequestModel } from '@/models/RequestModel';
 import { Storage } from '../lib/Storage/Storage';
 import { LocalStorage } from '../lib/Storage/StorageManager';
 

@@ -6,6 +6,7 @@ import { HeadersBody } from '@/lib/Types/HeadersBody';
 
 export interface MainBodyProps {
 	onBodyForm: ReactNode;
+	onBodyFormEncoded: ReactNode;
 	onBodyJson: ReactNode;
 	changeTab: (tab: string) => void;
 	tab: KeysDefaultBody;
@@ -13,7 +14,15 @@ export interface MainBodyProps {
 	setHeaders(headers: ItemHeader[]): void;
 }
 
-export default function MainBody({ onBodyForm, onBodyJson, changeTab, tab, headers, setHeaders }: MainBodyProps) {
+export default function MainBody({
+	onBodyForm,
+	onBodyJson,
+	onBodyFormEncoded,
+	changeTab,
+	tab,
+	headers,
+	setHeaders,
+}: MainBodyProps) {
 	const tabs: string[] = ['none', 'json', 'form', 'form-encoded'];
 
 	useEffect(() => {
@@ -56,7 +65,7 @@ export default function MainBody({ onBodyForm, onBodyJson, changeTab, tab, heade
 		}
 
 		if (key === 'form-encoded') {
-			return null;
+			return onBodyFormEncoded;
 		}
 
 		if (key === 'json') {

@@ -1,9 +1,12 @@
+import { FormEncoded } from "@/models/FormEncoded";
+
 export type JsonItem = {
 	[key: string]: string | number | boolean | [] | object;
 };
 
 export interface DefaultBody {
 	form: FormData;
+	formEncoded: FormEncoded[];
 	json: string | undefined | null;
 }
 

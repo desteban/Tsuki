@@ -25,7 +25,9 @@
 			"@/*": ["./*"],
 			"@components/*": ["./components/*"],
 			"@assets/*": ["./assets/*"],
-			"@lib/*": ["./lib/*"]
+			"@lib/*": ["./lib/*"],
+			"@models/*": ["./models/*"],
+			"@services/*": ["./services/*"],
 		}
 	},
 	"include": ["src", "electron"],

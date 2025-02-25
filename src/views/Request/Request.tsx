@@ -93,6 +93,12 @@ export default function Request({ setResponse }: RequestProps) {
 									setBody={hookRequest.setBody}
 								/>
 							}
+							onBodyFormEncoded={
+								<BodyForm
+									body={hookRequest.body}
+									setBody={hookRequest.setBody}
+								/>
+							}
 						/>
 					}
 				/>

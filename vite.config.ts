@@ -33,6 +33,8 @@ export default defineConfig({
 			'@components': path.resolve(__dirname, 'src/components'),
 			'@assets': path.resolve(__dirname, 'src/assets'),
 			'@lib': path.resolve(__dirname, 'src/lib'),
+			'@models': path.resolve(__dirname, 'src/models'),
+			'@views': path.resolve(__dirname, 'src/views'),
 		},
 	},
 });

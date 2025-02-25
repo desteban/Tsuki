@@ -1,4 +1,4 @@
-import { HttpMethods } from '../Types/HttpMethods';
+import { HttpMethods } from '../lib/Types/HttpMethods';
 
 export interface Requests {
 	requests: RequestModel[];
