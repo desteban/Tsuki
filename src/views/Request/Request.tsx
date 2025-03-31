@@ -5,9 +5,11 @@ import Params from './components/Params/Params';
 import { FormatterHeadersInit } from '@/lib/FormatterHeadersInit';
 import { RequestUrl } from '@lib/RequestUrl';
 import { getContentBody, KeysDefaultBody } from './components/body/Items';
-import { BodyForm, MainBody, BodyJson } from './components/body';
 import { useRequest } from './Hooks/useRequest';
 import { DataResponse } from '@/lib/RequestUrl';
+import MainBody from './components/body/MainBody';
+import BodyJson from './components/body/BodyJson';
+import FormEncoded from './components/body/FormEncoded';
 
 interface RequestProps {
 	setResponse: (response: DataResponse | null) => void;
@@ -75,18 +77,14 @@ export default function Request({ setResponse }: RequestProps) {
 					}
 					onBody={
 						<MainBody
+							body={hookRequest.body}
+							setBody={hookRequest.setBody}
 							headers={hookRequest.headers}
 							setHeaders={hookRequest.setHeaders}
 							tab={hookRequest.keyBody}
 							changeTab={(tab) => {
 								setKeyBody(tab as KeysDefaultBody);
 							}}
-							onBodyForm={
-								<BodyForm
-									body={hookRequest.body}
-									setBody={hookRequest.setBody}
-								/>
-							}
 							onBodyJson={
 								<BodyJson
 									body={hookRequest.body}
@@ -94,10 +92,7 @@ export default function Request({ setResponse }: RequestProps) {
 								/>
 							}
 							onBodyFormEncoded={
-								<BodyForm
-									body={hookRequest.body}
-									setBody={hookRequest.setBody}
-								/>
+								<FormEncoded />
 							}
 						/>
 					}

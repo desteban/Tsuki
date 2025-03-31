@@ -1,17 +1,19 @@
 import TabSwitcher from '@/components/ui/Tabs/TabSwitcher';
 import { ReactNode, useEffect } from 'react';
-import { KeysDefaultBody } from './Items';
+import { DefaultBody, KeysDefaultBody } from './Items';
 import { ItemHeader } from '../Headers/ItemHeader';
 import { HeadersBody } from '@/lib/Types/HeadersBody';
 
 export interface MainBodyProps {
-	onBodyForm: ReactNode;
-	onBodyFormEncoded: ReactNode;
-	onBodyJson: ReactNode;
+	onBodyForm?: ReactNode;
+	onBodyFormEncoded?: ReactNode;
+	onBodyJson?: ReactNode;
 	changeTab: (tab: string) => void;
 	tab: KeysDefaultBody;
 	headers: ItemHeader[];
 	setHeaders(headers: ItemHeader[]): void;
+	body: DefaultBody
+	setBody: (valye: DefaultBody) => void
 }
 
 export default function MainBody({
@@ -25,6 +27,9 @@ export default function MainBody({
 }: MainBodyProps) {
 	const tabs: string[] = ['none', 'json', 'form', 'form-encoded'];
 
+	/**
+	 * Modificar los headers según el body que se quiere enviar
+	 */
 	useEffect(() => {
 		const KeyHeader = 'Content-Type';
 		const switchHeaderFromTab = {
@@ -34,22 +39,22 @@ export default function MainBody({
 			none: null,
 		};
 
-		const value = switchHeaderFromTab[tab];
+		const contentTab = switchHeaderFromTab[tab];
 
-		if (value === null) {
+		if (contentTab === null) {
 			setHeaders(headers.filter((header) => header.key !== KeyHeader));
 		}
 
-		if (value !== null) {
+		if (contentTab !== null) {
 			const header = headers.find((head) => head.key === KeyHeader);
 			const newHeaders = [...headers];
 
 			if (header) {
-				newHeaders[newHeaders.indexOf(header)].value = value;
+				newHeaders[newHeaders.indexOf(header)].value = contentTab;
 			} else {
 				newHeaders.splice(newHeaders.length - 1, 0, {
 					key: KeyHeader,
-					value: value,
+					value: contentTab,
 					allowDelete: false,
 					isActive: true,
 				});

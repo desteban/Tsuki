@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import { DefaultBody, KeysDefaultBody } from '../components/body/Items';
+import { KeysDefaultBody } from '../components/body/Items';
 import { FormEncoded } from "@models/FormEncoded";
+import { Body } from '@/models/Body';
 
-const initialState: DefaultBody = { form: new FormData(), json: '{}', formEncoded: [] };
+const initialState: Body = { form: new FormData(), json: '{}', formEncoded: [] };
 
 
 export function useBody() {
-	const [body, setBody] = useState<DefaultBody>(initialState);
+	const [body, setBody] = useState<Body>(initialState);
 	const [keyBody, setKeyBody] = useState<KeysDefaultBody>('none');
 
 	const changeJson = (json: string) => {

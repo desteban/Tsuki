@@ -99,7 +99,9 @@ svg {
 		--chart-4: 43 74% 66%;
 		--chart-5: 27 87% 67%;
 		--radius: 0.5rem;
+		--color: 
 	}
+
 	.dark {
 		--background: 240 8% 9%;
 		/* --primary: 255 83% 65%; */
@@ -156,4 +158,8 @@ h3 {
 
 button {
 	@apply dark:text-primary-foreground;
+}
+
+pre, code{
+	@apply text-mercury-900 dark:text-[color:hsl(214,16%,64%)];
 }
