@@ -1,52 +1,20 @@
-import { useState } from 'react';
-import { KeysDefaultBody } from '../components/body/Items';
-import { FormEncoded } from "@models/FormEncoded";
+import { useReducer, useState } from 'react';
 import { Body } from '@/models/Body';
+import { BodyReducer, initialStateBody } from '../reducers/BodyReducer';
+import { KeysBody } from '@/models/KeysBody';
 
-const initialState: Body = { form: new FormData(), json: '{}', formEncoded: [] };
+interface Props {
+	initialState?: Body;
+}
 
-
-export function useBody() {
-	const [body, setBody] = useState<Body>(initialState);
-	const [keyBody, setKeyBody] = useState<KeysDefaultBody>('none');
-
-	const changeJson = (json: string) => {
-		setBody({ ...body, json });
-	};
-
-	const addFormEncoded = (formEncoded: FormEncoded) => {
-		setBody({ ...body, formEncoded: [...body.formEncoded, formEncoded] });
-	};
-
-	const deleteFormEncoded = (index: number) => {
-		const newFormEncoded = body.formEncoded.filter((_, i) => i !== index);
-		setBody({ ...body, formEncoded: newFormEncoded });
-	};
-
-	const handleFormEncoded = (index: number, formEncoded: FormEncoded) => {
-		const newFormEncoded = body.formEncoded.map((item, i) => {
-			if (i !== index) {
-				return item;
-			}
-
-			return formEncoded;
-		});
-		setBody({ ...body, formEncoded: newFormEncoded });
-	};
-
-	const reset = () => {
-		setBody(initialState);
-	};
+export function useBody({ initialState = initialStateBody }: Props) {
+	const [keyBody, setKeyBody] = useState<KeysBody>('none');
+	const [state, dispatch] = useReducer(BodyReducer, initialState);
 
 	return {
-		body,
-		setBody,
 		keyBody,
 		setKeyBody,
-		changeJson,
-		addFormEncoded,
-		reset,
-		deleteFormEncoded,
-		handleFormEncoded,
+		state,
+		dispatch,
 	};
 }

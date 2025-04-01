@@ -1,20 +1,23 @@
-import { useReducer } from 'react';
+import { Dispatch } from 'react';
 import FormsWrapper from './FormsWrapper';
 import Row from './Row';
-import { ActionsBodyReducer, BodyReducer, initialStateBody } from '../../reducers/BodyReducer';
+import { ActionsBody, ActionsBodyReducer, } from '../../reducers/BodyReducer';
 import type { FormEncoded } from '@/models/FormEncoded';
+import { Body } from '@/models/Body';
 
-interface Props {}
+interface Props {
+  state: Body,
+  dispatch: Dispatch<ActionsBody>
+}
 
-export default function FormEncoded(props: Props) {
-	const [state, dispacth] = useReducer(BodyReducer, initialStateBody);
+export default function FormEncoded({dispatch, state}: Props) {
 
 	const changeItem = (item: FormEncoded, index: number) => {
-		dispacth({ type: ActionsBodyReducer.updateFormEncoded, payload: { index, item } });
+		dispatch({ type: ActionsBodyReducer.updateFormEncoded, payload: { index, item } });
 	};
 
   const deleteItem = (index: number) => {
-    dispacth({type: ActionsBodyReducer.deleteFormEncoded, payload: { index }})
+    dispatch({type: ActionsBodyReducer.deleteFormEncoded, payload: { index }})
   }
 
 	return (
@@ -30,10 +33,6 @@ export default function FormEncoded(props: Props) {
 					/>
 				))}
 			</FormsWrapper>
-
-			<pre>
-				<code>{JSON.stringify(state, null, 2)}</code>
-			</pre>
 		</div>
 	);
 }

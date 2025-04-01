@@ -4,12 +4,14 @@ import FormUrl from './components/FormUrl';
 import Params from './components/Params/Params';
 import { FormatterHeadersInit } from '@/lib/FormatterHeadersInit';
 import { RequestUrl } from '@lib/RequestUrl';
-import { getContentBody, KeysDefaultBody } from './components/body/Items';
+import { getContentBody } from './components/body/utils/getContentBody';
 import { useRequest } from './Hooks/useRequest';
 import { DataResponse } from '@/lib/RequestUrl';
 import MainBody from './components/body/MainBody';
 import BodyJson from './components/body/BodyJson';
 import FormEncoded from './components/body/FormEncoded';
+import { ActionsBodyReducer } from './reducers/BodyReducer';
+import { KeysBody } from '@/models/KeysBody';
 
 interface RequestProps {
 	setResponse: (response: DataResponse | null) => void;
@@ -17,24 +19,24 @@ interface RequestProps {
 
 export default function Request({ setResponse }: RequestProps) {
 	const hookRequest = useRequest();
-	const { abortController, setLoad, setKeyBody, url, method, headers, keyBody, body } = hookRequest;
+	const { abortController, setLoad, url, method, headers, setHeaders, body } = hookRequest;
 
 	const Send = async () => {
 		abortController.current = new AbortController();
 		setLoad(true);
+		const bodyContent =  body.keyBody !== undefined ? getContentBody(body.state, body.keyBody) : null
 		const respuesta = await RequestUrl({
 			url,
 			methodType: method,
 			abortController: abortController.current,
 			headers: FormatterHeadersInit(headers),
-			body: keyBody !== undefined ? getContentBody(body, keyBody) : null,
+			body: bodyContent,
 		});
 
 		setLoad(false);
 		if (respuesta.isLeft()) {
 			console.error(respuesta.left);
 		}
-
 		if (respuesta.isRight()) {
 			setResponse(respuesta.Right());
 		}
@@ -43,6 +45,10 @@ export default function Request({ setResponse }: RequestProps) {
 	const CancelRequest = () => {
 		abortController.current?.abort();
 		setLoad(false);
+	};
+
+	const changeJson = (json: string | null | undefined) => {
+		body.dispatch({ type: ActionsBodyReducer.updateJson, payload: json });
 	};
 
 	return (
@@ -77,22 +83,23 @@ export default function Request({ setResponse }: RequestProps) {
 					}
 					onBody={
 						<MainBody
-							body={hookRequest.body}
-							setBody={hookRequest.setBody}
-							headers={hookRequest.headers}
-							setHeaders={hookRequest.setHeaders}
-							tab={hookRequest.keyBody}
+							headers={headers}
+							setHeaders={setHeaders}
+							tab={body.keyBody}
 							changeTab={(tab) => {
-								setKeyBody(tab as KeysDefaultBody);
+								body.setKeyBody(tab as KeysBody);
 							}}
 							onBodyJson={
 								<BodyJson
-									body={hookRequest.body}
-									setBody={hookRequest.setBody}
+									content={body.state.json}
+									updateContent={changeJson}
 								/>
 							}
 							onBodyFormEncoded={
-								<FormEncoded />
+								<FormEncoded
+									state={body.state}
+									dispatch={body.dispatch}
+								/>
 							}
 						/>
 					}

@@ -10,7 +10,7 @@ export function useRequest() {
 	const [method, setMethod] = useState<HttpMethods>('GET');
 	const { params, setParams, setUrl, url, handleParamsFromUrl } = useUrl();
 	const { headers, setHeaders, deleteHeader, handleHeader } = useHeaders();
-	const { body, keyBody, setBody, setKeyBody } = useBody();
+	const { dispatch, keyBody, setKeyBody, state } = useBody({});
 
 	return {
 		load,
@@ -27,9 +27,11 @@ export function useRequest() {
 		setHeaders,
 		deleteHeader,
 		handleHeader,
-		body,
-		keyBody,
-		setBody,
-		setKeyBody,
+		body: {
+			dispatch,
+			keyBody,
+			setKeyBody,
+			state,
+		},
 	};
 }

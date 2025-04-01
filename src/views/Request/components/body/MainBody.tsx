@@ -1,20 +1,25 @@
 import TabSwitcher from '@/components/ui/Tabs/TabSwitcher';
 import { ReactNode, useEffect } from 'react';
-import { DefaultBody, KeysDefaultBody } from './Items';
 import { ItemHeader } from '../Headers/ItemHeader';
 import { HeadersBody } from '@/lib/Types/HeadersBody';
+import { KeysBody } from '@/models/KeysBody';
 
 export interface MainBodyProps {
+	changeTab: (tab: string) => void;
+	headers: ItemHeader[];
 	onBodyForm?: ReactNode;
 	onBodyFormEncoded?: ReactNode;
 	onBodyJson?: ReactNode;
-	changeTab: (tab: string) => void;
-	tab: KeysDefaultBody;
-	headers: ItemHeader[];
 	setHeaders(headers: ItemHeader[]): void;
-	body: DefaultBody
-	setBody: (valye: DefaultBody) => void
+	tab: KeysBody;
 }
+
+const switchHeaderFromTab: {[key in KeysBody]: any} = {
+	json: HeadersBody.json,
+	form: HeadersBody.form,
+	'form-encoded': HeadersBody.xForm,
+	none: null,
+};
 
 export default function MainBody({
 	onBodyForm,
@@ -25,20 +30,13 @@ export default function MainBody({
 	headers,
 	setHeaders,
 }: MainBodyProps) {
-	const tabs: string[] = ['none', 'json', 'form', 'form-encoded'];
+	const tabs: KeysBody[] = ['none', 'json', 'form', 'form-encoded'];
 
 	/**
 	 * Modificar los headers según el body que se quiere enviar
 	 */
 	useEffect(() => {
 		const KeyHeader = 'Content-Type';
-		const switchHeaderFromTab = {
-			json: HeadersBody.json,
-			form: HeadersBody.form,
-			'form-encoded': HeadersBody.xForm,
-			none: null,
-		};
-
 		const contentTab = switchHeaderFromTab[tab];
 
 		if (contentTab === null) {

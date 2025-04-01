@@ -1,14 +1,13 @@
 import { Button } from '@/components/ui/button';
-import { DefaultBody } from './Items';
 import { FileJson2 } from 'lucide-react';
 import { Editor, useRefEditor } from '@/components/ui/Editor';
 
 interface BodyJsonProps {
-	body: DefaultBody;
-	setBody: (body: DefaultBody) => void;
+	content: string | null | undefined;
+	updateContent: (json: string) => void
 }
 
-export default function BodyJson({ body, setBody }: BodyJsonProps) {
+export default function BodyJson({ content, updateContent }: BodyJsonProps) {
 	const { editorRef, formatEditor } = useRefEditor();
 
 	const changeJson = (value: string | undefined) => {
@@ -16,7 +15,7 @@ export default function BodyJson({ body, setBody }: BodyJsonProps) {
 			return;
 		}
 		const data = value;
-		setBody({ ...body, json: data });
+		updateContent(data)
 	};
 
 	return (
@@ -42,7 +41,7 @@ export default function BodyJson({ body, setBody }: BodyJsonProps) {
 				className="min-h-80"
 				onChange={changeJson}
 				refEditor={editorRef}
-				value={body.json || undefined}
+				value={content || undefined}
 			/>
 		</div>
 	);
