@@ -1,7 +1,8 @@
 import { FormEncoded } from './FormEncoded';
+import { MultipartFormData } from './MultipartFormData';
 
 export type Body = {
-	form: FormData;
+	form: MultipartFormData[];
 	formEncoded: FormEncoded[];
 	json: string | undefined | null;
 };

@@ -106,7 +106,7 @@ svg {
 		--background: 240 8% 9%;
 		/* --primary: 255 83% 65%; */
 		--primary-foreground: 214 23% 98%;
-		--secondary: 255 5% 47%;
+		--secondary: 255 5% 47% / 71%;
 		/* --secondary-foreground: 0 0% 98%;
 		/* --foreground: 0 0% 98%; */
 		/* --card: 0 0% 3.9%; */
@@ -160,6 +160,18 @@ button {
 	@apply dark:text-primary-foreground;
 }
 
-pre, code{
+pre, code, label{
 	@apply text-mercury-900 dark:text-[color:hsl(214,16%,64%)];
+}
+
+tr.row{
+	@apply p-1 focus-within:bg-accent hover:bg-haiti-50 dark:bg-opacity-70 dark:focus-within:bg-secondary dark:hover:bg-secondary;
+}
+
+td.col{
+	@apply border border-[#e5e5e5] group-focus:bg-accent rounded-md flex w-full space-x-3 items-center;
+
+	& input {
+		border: none;
+	}
 }

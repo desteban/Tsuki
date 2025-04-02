@@ -26,7 +26,7 @@ export default function Row({ header, changeActive, changeKey, changeParam, dele
 	};
 
 	return (
-		<tr className="group p-1 focus-within:bg-accent hover:bg-haiti-50 dark:bg-opacity-70 dark:focus-within:bg-secondary dark:hover:bg-secondary">
+		<tr className="row">
 			<td>
 				<label className="flex cursor-pointer items-center justify-center">
 					<input

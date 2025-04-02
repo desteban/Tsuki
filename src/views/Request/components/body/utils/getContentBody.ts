@@ -1,10 +1,18 @@
 import { Body } from "@/models/Body";
 import { KeysBody } from "@/models/KeysBody";
+import { FormatToFormEncoded } from "@/services/FormaterFormEncoded";
 
 
-export function getContentBody(body: Body, key: KeysBody): BodyInit | null | undefined {
+export function getContentBody(body: Body, key: KeysBody) {
 	if (key === 'form') {
-		return body.form;
+		const formData = new FormData()
+		body.form.forEach((item) => {
+			if (item.active && item.value) {
+				formData.append(item.key, item.value )
+			}
+		})
+
+		return formData
 	}
 
 	if (key === 'json') {
@@ -12,13 +20,7 @@ export function getContentBody(body: Body, key: KeysBody): BodyInit | null | und
 	}
 
 	if (key === 'form-encoded') {
-		const formdata = new URLSearchParams()
-		body.formEncoded.forEach((item) => {
-			if (item.key.length !== 0) {
-				formdata.append(item.key, item.value)
-			}
-		})
-		return formdata;		
+		return FormatToFormEncoded(body.formEncoded)		
 	}
 
 	return null;

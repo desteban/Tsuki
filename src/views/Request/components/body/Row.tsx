@@ -2,42 +2,102 @@ import { ChangeEvent, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { TrashIcon } from '@/assets/Icons/TrashIcon';
 import { FormEncoded } from '@/models/FormEncoded';
+import { MultipartFormData, TypesMultiPartFormData } from '@/models/MultipartFormData';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-interface PropsRowHeaders {
-	item: FormEncoded;
+interface BasePropsRowHeaders<T> {
+	item: T;
 	index: number;
-	changeItem: (item: FormEncoded, index: number) => void;
-	deleteItem: (index: number) => void
+	changeItem: (item: T, index: number) => void;
+	deleteItem: (index: number) => void;
+	variant: 'encoded' | 'multipart';
 }
 
-export default function Row({ item, deleteItem, changeItem, index }: PropsRowHeaders) {
+type PropsRowHeaders =
+	| (BasePropsRowHeaders<FormEncoded> & { variant: 'encoded' })
+	| (BasePropsRowHeaders<MultipartFormData> & { variant: 'multipart' });
+
+export default function Row({ item, deleteItem, changeItem, index, variant }: PropsRowHeaders) {
+	const typeInput = variant === 'multipart' ? item.type : TypesMultiPartFormData.text;
 	const inputRef = useRef<HTMLInputElement>(null);
 	const valueRef = useRef<HTMLInputElement>(null);
 
 	const handleKey = (e: ChangeEvent<HTMLInputElement>) => {
-		changeItem({ ...item, key: e.currentTarget.value, active: true }, index);
+		if (variant === 'encoded') changeItem({ ...item, key: e.currentTarget.value, active: true }, index);
+
+		if (variant === 'multipart') changeItem({ ...item, key: e.currentTarget.value, active: true }, index);
+
 		inputRef.current?.focus();
 	};
 
 	const handleValue = (e: ChangeEvent<HTMLInputElement>) => {
-		changeItem({ ...item, value: e.currentTarget.value, active: true }, index);
+		if (variant === 'encoded') changeItem({ ...item, value: e.currentTarget.value, active: true }, index);
+
+		if (variant === 'multipart') {
+			const { value, type, files } = e.target;
+			const newItem = { ...item };
+			if (newItem.type === TypesMultiPartFormData.file && type === TypesMultiPartFormData.file && files) {
+				newItem.value = files[0];
+			}
+
+			if (newItem.type === TypesMultiPartFormData.text && type === TypesMultiPartFormData.text) {
+				newItem.value = value;
+			}
+			changeItem(newItem, index);
+		}
 		valueRef.current?.focus();
 	};
 
 	const changeActive = () => {
-		changeItem({ ...item, active: !item.active }, index);
+		if (variant === 'encoded') changeItem({ ...item, active: !item.active }, index);
+
+		if (variant === 'multipart') changeItem({ ...item, active: !item.active }, index);
 	};
 
-	const DeleteButton = () => (<button
-		onClick={() => deleteItem(index)}
-		aria-label="delete param"
-		className="rounded-full p-1 text-primary transition duration-200 hover:bg-primary hover:bg-opacity-50 hover:text-mercury-100"
-	>
-		<TrashIcon className="size-6" />
-	</button>)
+	const DeleteButton = () => (
+		<button
+			onClick={() => deleteItem(index)}
+			aria-label="delete param"
+			className="rounded-full p-1 text-primary transition duration-200 hover:bg-primary hover:bg-opacity-50 hover:text-mercury-100"
+		>
+			<TrashIcon className="size-6" />
+		</button>
+	);
+
+	const changeType = (type: TypesMultiPartFormData) => {
+		if (variant === 'encoded' || type === item.type) return;
+
+		if (variant === 'multipart') {
+			const newItem: MultipartFormData = { ...item };
+			newItem.type = type;
+			newItem.value = type === TypesMultiPartFormData.text ? '' : null;
+			changeItem(newItem, index);
+		}
+	};
+
+	const ChooseType = () => {
+		if (variant === 'encoded') return null;
+
+		if (variant === 'multipart') {
+			return (
+				<Select
+					value={item.type}
+					onValueChange={changeType}
+				>
+					<SelectTrigger className="w-[180px]">
+						<SelectValue placeholder="Type" />
+					</SelectTrigger>
+					<SelectContent>
+						<SelectItem value={TypesMultiPartFormData.text}>Text</SelectItem>
+						<SelectItem value={TypesMultiPartFormData.file}>File</SelectItem>
+					</SelectContent>
+				</Select>
+			);
+		}
+	};
 
 	return (
-		<tr className="group p-1 focus-within:bg-accent hover:bg-haiti-50 dark:bg-opacity-70 dark:focus-within:bg-secondary dark:hover:bg-secondary">
+		<tr className="row">
 			<td>
 				<label className="flex cursor-pointer items-center justify-center">
 					<input
@@ -50,21 +110,27 @@ export default function Row({ item, deleteItem, changeItem, index }: PropsRowHea
 				</label>
 			</td>
 
-			<td width={'50%'}>
+			<td
+				width={'50%'}
+				className="col"
+			>
 				<Input
-					className={`group border-[#e5e5e5] group-focus:bg-accent`}
+					className={`group`}
 					placeholder="key"
 					value={item.key}
 					ref={inputRef}
 					onChange={handleKey}
 				/>
+
+				<ChooseType />
 			</td>
 
 			<td width={'50%'}>
 				<Input
+					type={typeInput}
 					className={`group border-[#e5e5e5] group-focus:bg-accent`}
 					placeholder="value"
-					value={item.value}
+					value={typeInput === 'text' ? (item.value as string) : undefined}
 					ref={valueRef}
 					onChange={handleValue}
 				/>
@@ -74,7 +140,7 @@ export default function Row({ item, deleteItem, changeItem, index }: PropsRowHea
 				className="flex items-center justify-center"
 				width={45}
 			>
-				{ index === 0 || <DeleteButton /> }
+				{index === 0 || <DeleteButton />}
 			</td>
 		</tr>
 	);

@@ -12,6 +12,7 @@ import BodyJson from './components/body/BodyJson';
 import FormEncoded from './components/body/FormEncoded';
 import { ActionsBodyReducer } from './reducers/BodyReducer';
 import { KeysBody } from '@/models/KeysBody';
+import FormMultipart from './components/body/FormMultipart';
 
 interface RequestProps {
 	setResponse: (response: DataResponse | null) => void;
@@ -24,12 +25,19 @@ export default function Request({ setResponse }: RequestProps) {
 	const Send = async () => {
 		abortController.current = new AbortController();
 		setLoad(true);
-		const bodyContent =  body.keyBody !== undefined ? getContentBody(body.state, body.keyBody) : null
+		const bodyContent = body.keyBody !== undefined ? getContentBody(body.state, body.keyBody) : null;
+		const headersRequest = FormatterHeadersInit(headers) 
+
+		if (body.keyBody === 'form') {
+			// * remover el header Content-Type porque el navegador se encarga del boundary
+			headersRequest.delete('Content-Type')
+		}
+
 		const respuesta = await RequestUrl({
 			url,
 			methodType: method,
 			abortController: abortController.current,
-			headers: FormatterHeadersInit(headers),
+			headers: headersRequest,
 			body: bodyContent,
 		});
 
@@ -97,6 +105,12 @@ export default function Request({ setResponse }: RequestProps) {
 							}
 							onBodyFormEncoded={
 								<FormEncoded
+									state={body.state}
+									dispatch={body.dispatch}
+								/>
+							}
+							onBodyForm={
+								<FormMultipart
 									state={body.state}
 									dispatch={body.dispatch}
 								/>
