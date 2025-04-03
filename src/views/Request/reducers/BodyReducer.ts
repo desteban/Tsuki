@@ -30,13 +30,13 @@ type PayloadTypes = {
 	[ActionsBodyReducer.updateJson]: string | null | undefined;
 	[ActionsBodyReducer.updateFormMultipart]: { index: number; item: MultipartFormData };
 	[ActionsBodyReducer.deleteFormMultipart]: { index: number };
-  };
+};
 
-  type Action<T extends ActionsBodyReducer> = {
+type Action<T extends ActionsBodyReducer> = {
 	type: T;
-  } & (T extends keyof PayloadTypes ? { payload: PayloadTypes[T] } : {});
-  
-  export type ActionsBody = Action<ActionsBodyReducer>;
+} & (T extends keyof PayloadTypes ? { payload: PayloadTypes[T] } : {});
+
+export type ActionsBody = Action<ActionsBodyReducer>;
 
 type ActionsHadlers = {
 	[key in ActionsBodyReducer]: (state: Body, action: any) => Body;
@@ -51,11 +51,17 @@ export function BodyReducer(state: Body, action: ActionsBody): Body {
 	return state;
 }
 
-const deleteFormEncoded = (state: Body, action: { payload: PayloadTypes[ActionsBodyReducer.deleteFormEncoded] }): Body => {
+const deleteFormEncoded = (
+	state: Body,
+	action: { payload: PayloadTypes[ActionsBodyReducer.deleteFormEncoded] },
+): Body => {
 	return { ...state, formEncoded: state.formEncoded.filter((_, index) => index !== action.payload.index) };
 };
 
-const updateFormEncoded = (state: Body, action: { payload: PayloadTypes[ActionsBodyReducer.updateFormEncoded] }): Body => {
+const updateFormEncoded = (
+	state: Body,
+	action: { payload: PayloadTypes[ActionsBodyReducer.updateFormEncoded] },
+): Body => {
 	const { index, item } = action.payload;
 	const newFormEncoded = state.formEncoded;
 	newFormEncoded[index] = item;
@@ -71,7 +77,10 @@ const updateJson = (state: Body, action: { payload: string }): Body => {
 	return { ...state, json: action.payload };
 };
 
-const updateFormMultipart = (state: Body, action: { payload: PayloadTypes[ActionsBodyReducer.updateFormMultipart] }): Body => {
+const updateFormMultipart = (
+	state: Body,
+	action: { payload: PayloadTypes[ActionsBodyReducer.updateFormMultipart] },
+): Body => {
 	const { index, item } = action.payload;
 	const newMultiPart = state.form;
 	newMultiPart[index] = item;
@@ -83,7 +92,10 @@ const updateFormMultipart = (state: Body, action: { payload: PayloadTypes[Action
 	return { ...state, form: newMultiPart };
 };
 
-const deleteFormMultipart = (state: Body, action: { payload: PayloadTypes[ActionsBodyReducer.deleteFormMultipart] }): Body => {
+const deleteFormMultipart = (
+	state: Body,
+	action: { payload: PayloadTypes[ActionsBodyReducer.deleteFormMultipart] },
+): Body => {
 	return { ...state, form: state.form.filter((_, index) => index !== action.payload.index) };
 };
 
