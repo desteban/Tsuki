@@ -1,16 +1,21 @@
 import { ReactNode, createContext, useEffect, useState } from 'react';
 
-type themes = 'light' | 'dark';
+export enum ThemesApp {
+	light = 'light',
+	dark = 'dark',
+}
+
+type Themes = keyof typeof ThemesApp;
 
 interface Context {
-	theme: themes;
+	theme: Themes;
 	changeTheme(): void;
 }
 
-export const ThemeContext = createContext<Context>({ theme: 'light', changeTheme() {} });
+export const ThemeContext = createContext<Context>({ theme: ThemesApp.light, changeTheme() {} });
 
 export function ThemeContextProvider({ children }: { children: ReactNode }) {
-	const [theme, setTheme] = useState<themes>(() => {
+	const [theme, setTheme] = useState<Themes>(() => {
 		if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
 			return 'dark';
 		}
